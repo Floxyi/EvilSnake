@@ -34,7 +34,7 @@ Position Utils::computeAlignedPosition(const char *text, float fontSize,
     position.y = windowHeight - fontSize - padding;
     break;
   case VerticalAlignment::CENTER:
-    position.y = (windowHeight - fontSize) / 2;
+    position.y = (windowHeight - fontSize) / 2 + padding;
     break;
   case VerticalAlignment::TOP:
     position.y = padding;

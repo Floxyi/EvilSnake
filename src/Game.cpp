@@ -1,4 +1,5 @@
 #include "../include/Game.h"
+#include "../include/Constants.h"
 #include "../include/Utils.h"
 #include "raylib.h"
 
@@ -13,6 +14,7 @@ Game::Game(int width, int height, int gridSize)
 void Game::reset() {
   this->score = 0;
   this->snake.reset();
+  state = GameState::MENU;
 }
 
 void Game::handleInput() {
@@ -22,7 +24,6 @@ void Game::handleInput() {
 
   if (state == GameState::PLAYING && IsKeyPressed(KEY_SPACE)) {
     reset();
-    state = GameState::MENU;
   }
 
   if (state == GameState::GAME_OVER && IsKeyPressed(KEY_SPACE)) {
@@ -45,7 +46,7 @@ void Game::update(float deltaTime) {
   if (state == GameState::PLAYING) {
     timeSinceLastMove += deltaTime;
 
-    if (timeSinceLastMove >= 0.2f) {
+    if (timeSinceLastMove >= Constants::SNAKE_SPEED) {
       timeSinceLastMove = 0.0f;
 
       if (snake.move(foodPosition)) {
@@ -92,6 +93,9 @@ void Game::drawMenuScreen() {
                          DARKGRAY, VerticalAlignment::TOP,
                          HorizontalAlignment::CENTER, 120, windowWidth,
                          windowHeight);
+  Utils::drawAlignedText("(play with arrow keys)", 20, DARKGRAY,
+                         VerticalAlignment::TOP, HorizontalAlignment::CENTER,
+                         150, windowWidth, windowHeight);
   Utils::drawAlignedText("v1.0", 20, DARKGRAY, VerticalAlignment::BOTTOM,
                          HorizontalAlignment::RIGHT, 10, windowWidth,
                          windowHeight);
@@ -112,7 +116,7 @@ void Game::drawPlayingScreen() {
 }
 
 void Game::draw() {
-  ClearBackground(RAYWHITE);
+  ClearBackground(Constants::BACKGROUND_COLOR);
   drawGrid(gridSize, LIGHTGRAY);
   DrawFPS(GetScreenWidth() - 110, 10);
 
@@ -135,12 +139,12 @@ void Game::draw() {
 void Game::run() {
   InitWindow(windowWidth, windowHeight, "Evil Snake");
 
-  int display = GetCurrentMonitor();
-  windowWidth = GetMonitorWidth(display);
-  windowHeight = GetMonitorHeight(display);
+  // int display = GetCurrentMonitor();
+  //  windowWidth = GetMonitorWidth(display);
+  //  windowHeight = GetMonitorHeight(display);
 
-  SetWindowSize(windowWidth, windowHeight);
-  ToggleFullscreen();
+  // SetWindowSize(windowWidth, windowHeight);
+  // ToggleFullscreen();
 
   while (!WindowShouldClose()) {
     float deltaTime = GetFrameTime();
