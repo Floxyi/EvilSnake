@@ -198,6 +198,9 @@ void Game::draw() {
 
 void Game::run() {
   InitWindow(windowWidth, windowHeight, "Evil Snake");
+  Image icon = LoadImage("assets/textures/EvilSnake.png");
+  SetWindowIcon(icon);
+  UnloadImage(icon);
 
   // int display = GetCurrentMonitor();
   // windowWidth = GetMonitorWidth(display);
