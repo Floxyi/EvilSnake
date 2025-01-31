@@ -5,7 +5,7 @@
 #include "Snake.h"
 #include "raylib.h"
 
-enum class GameState { MENU, PLAYING, GAME_OVER };
+enum class GameState { MENU, PLAYING, FINISHED, GAME_OVER };
 
 class Game {
 private:
@@ -23,9 +23,11 @@ private:
   void draw();
   void drawGrid(int gridSize, Color color);
   void drawGameOverScreen();
+  void drawGameFinishedScreen();
   void drawMenuScreen();
   void drawPlayingScreen();
   void reset();
+  bool isGameFinished() const;
 
 public:
   Game(int width, int height, int grid);

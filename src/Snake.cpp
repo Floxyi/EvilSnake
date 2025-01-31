@@ -32,6 +32,8 @@ bool Snake::move(const Position &foodPosition) {
   case Direction::RIGHT:
     head.x += gridSize;
     break;
+  default:
+    break;
   }
 
   head.x = (head.x + GetScreenWidth()) % GetScreenWidth();
@@ -66,4 +68,13 @@ void Snake::reset() {
   body.clear();
   body.push_back({gridSize * 5, gridSize * 5});
   direction = Direction::RIGHT;
+}
+
+bool Snake::isOnSnake(Position position) const {
+  for (const Position &bodyPart : body) {
+    if (bodyPart.x == position.x && bodyPart.y == position.y) {
+      return true;
+    }
+  }
+  return false;
 }

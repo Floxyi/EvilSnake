@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include "Position.h"
+#include "Snake.h"
 #include "raylib.h"
 
 enum class VerticalAlignment { TOP, CENTER, BOTTOM };
@@ -11,6 +12,8 @@ class Utils {
 public:
   static Position getRandomGridPosition(int gridSize, int windowWidth,
                                         int windowHeight);
+  static Position getRandomFoodPosition(Snake &snake, int gridSize,
+                                        int windowWidth, int windowHeight);
 
   static void drawAlignedText(const char *text, float fontSize, Color color,
                               VerticalAlignment verticalAlignment,

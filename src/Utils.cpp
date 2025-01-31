@@ -1,5 +1,6 @@
 #include "../include/Utils.h"
 #include "../include/Position.h"
+#include "../include/Snake.h"
 #include "raylib.h"
 
 Position Utils::getRandomGridPosition(int gridSize, int windowWidth,
@@ -7,6 +8,15 @@ Position Utils::getRandomGridPosition(int gridSize, int windowWidth,
   int x = GetRandomValue(0, (windowWidth / gridSize) - 1) * gridSize;
   int y = GetRandomValue(0, (windowHeight / gridSize) - 1) * gridSize;
   return {x, y};
+}
+
+Position Utils::getRandomFoodPosition(Snake &snake, int gridSize,
+                                      int windowWidth, int windowHeight) {
+  Position position;
+  do {
+    position = getRandomGridPosition(gridSize, windowWidth, windowHeight);
+  } while (snake.isOnSnake(position));
+  return position;
 }
 
 Position Utils::computeAlignedPosition(const char *text, float fontSize,

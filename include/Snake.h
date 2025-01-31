@@ -21,6 +21,7 @@ public:
   bool hasCollided() const;
   void draw() const;
   void reset();
+  bool isOnSnake(Position position) const;
 };
 
 #endif

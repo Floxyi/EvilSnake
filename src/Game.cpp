@@ -17,6 +17,11 @@ void Game::reset() {
   state = GameState::MENU;
 }
 
+bool Game::isGameFinished() const {
+  return score >= Constants::GRID_Y_AMOUNT * Constants::WINDOW_WIDTH /
+                      Constants::GRID_SIZE;
+}
+
 void Game::handleInput() {
   if (state == GameState::PLAYING && IsKeyPressed(KEY_SPACE)) {
     reset();
@@ -55,6 +60,10 @@ void Game::handleInput() {
 }
 
 void Game::update(float deltaTime) {
+  if (isGameFinished()) {
+    state = GameState::FINISHED;
+  }
+
   if (state == GameState::PLAYING) {
     timeSinceLastMove += deltaTime;
 
@@ -87,6 +96,20 @@ void Game::drawGameOverScreen() {
   Utils::drawAlignedText("GAME OVER", 40, DARKGRAY, VerticalAlignment::CENTER,
                          HorizontalAlignment::CENTER, -100, windowWidth,
                          windowHeight);
+  Utils::drawAlignedText(
+      (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
+      VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50, windowWidth,
+      windowHeight);
+  Utils::drawAlignedText("Press the [SPACE] key to get back to the menu", 20,
+                         DARKGRAY, VerticalAlignment::CENTER,
+                         HorizontalAlignment::CENTER, 50, windowWidth,
+                         windowHeight);
+}
+
+void Game::drawGameFinishedScreen() {
+  Utils::drawAlignedText("YOU WON, CONGRATULATIONS!", 40, DARKGRAY,
+                         VerticalAlignment::CENTER, HorizontalAlignment::CENTER,
+                         -100, windowWidth, windowHeight);
   Utils::drawAlignedText(
       (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50, windowWidth,
@@ -144,6 +167,9 @@ void Game::draw() {
     break;
   case GameState::PLAYING:
     drawPlayingScreen();
+    break;
+  case GameState::FINISHED:
+    drawGameFinishedScreen();
     break;
   case GameState::GAME_OVER:
     drawGameOverScreen();
