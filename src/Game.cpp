@@ -102,38 +102,38 @@ void Game::drawGrid(int gridSize, Color color) {
 }
 
 void Game::drawGameOverScreen() {
-  Utils::drawAlignedText("GAME OVER", 40, DARKGRAY, VerticalAlignment::CENTER,
+  Utils::drawAlignedText("GAME OVER", 60, DARKGRAY, VerticalAlignment::CENTER,
                          HorizontalAlignment::CENTER, -100, windowWidth,
                          windowHeight);
   Utils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
+      (std::string("Score: ") + std::to_string(score)).c_str(), 30, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50, windowWidth,
       windowHeight);
-  Utils::drawAlignedText("Press the [SPACE] key to get back to the menu", 20,
+  Utils::drawAlignedText("Press the [SPACE] key to get back to the menu", 30,
                          DARKGRAY, VerticalAlignment::CENTER,
                          HorizontalAlignment::CENTER, 50, windowWidth,
                          windowHeight);
 }
 
 void Game::drawGameFinishedScreen() {
-  Utils::drawAlignedText("YOU WON, CONGRATULATIONS!", 40, DARKGRAY,
+  Utils::drawAlignedText("YOU WON, CONGRATULATIONS!", 60, DARKGRAY,
                          VerticalAlignment::CENTER, HorizontalAlignment::CENTER,
                          -100, windowWidth, windowHeight);
   Utils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
+      (std::string("Score: ") + std::to_string(score)).c_str(), 30, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50, windowWidth,
       windowHeight);
-  Utils::drawAlignedText("[SPACE] - Back to main menu", 20, DARKGRAY,
+  Utils::drawAlignedText("[SPACE] - Back to main menu", 30, DARKGRAY,
                          VerticalAlignment::CENTER, HorizontalAlignment::CENTER,
                          50, windowWidth, windowHeight);
 }
 
 void Game::drawMenuScreen() {
-  Utils::drawAlignedText("Welcome to EvilSnake!", 40, DARKGRAY,
+  Utils::drawAlignedText("Welcome to EvilSnake!", 70, DARKGRAY,
                          VerticalAlignment::TOP, HorizontalAlignment::CENTER,
                          50, windowWidth, windowHeight);
   Utils::drawAlignedText(
-      "Press the [ARROW KEYS] key to start and play the game", 20, DARKGRAY,
+      "Press the [ARROW KEYS] key to start and play the game", 25, DARKGRAY,
       VerticalAlignment::TOP, HorizontalAlignment::CENTER, 120, windowWidth,
       windowHeight);
   Utils::drawAlignedText("Made by Florian", 20, DARKGRAY,
@@ -162,11 +162,11 @@ void Game::drawPlayingScreen() {
       (milliseconds < 10 ? "0" : "") + std::to_string(milliseconds);
 
   Utils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
-      VerticalAlignment::TOP, HorizontalAlignment::LEFT, 10, windowWidth,
+      (std::string("Score: ") + std::to_string(score)).c_str(), 30, DARKGRAY,
+      VerticalAlignment::TOP, HorizontalAlignment::RIGHT, 10, windowWidth,
       windowHeight);
-  Utils::drawAlignedText(("Time: " + timeString).c_str(), 20, DARKGRAY,
-                         VerticalAlignment::TOP, HorizontalAlignment::RIGHT, 10,
+  Utils::drawAlignedText(("Time: " + timeString).c_str(), 30, DARKGRAY,
+                         VerticalAlignment::TOP, HorizontalAlignment::LEFT, 10,
                          windowWidth, windowHeight);
   Utils::drawAlignedText("[SPACE] - Quit to main menu", 20, DARKGRAY,
                          VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER,
@@ -202,6 +202,8 @@ void Game::run() {
   SetWindowIcon(icon);
   UnloadImage(icon);
 
+  Utils::initializeFont("assets/fonts/ThaleahFat.ttf");
+
   // int display = GetCurrentMonitor();
   // windowWidth = GetMonitorWidth(display);
   // windowHeight = GetMonitorHeight(display);
@@ -218,5 +220,6 @@ void Game::run() {
     EndDrawing();
   }
 
+  UnloadFont(Utils::font);
   CloseWindow();
 }

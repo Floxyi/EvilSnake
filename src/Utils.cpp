@@ -1,6 +1,11 @@
 #include "../include/Utils.h"
-#include "../include/Snake.h"
-#include "raylib.h"
+#include <ctime>
+
+Font Utils::font;
+
+void Utils::initializeFont(const char *fontPath) {
+  font = LoadFontEx(fontPath, 128, 0, 250);
+}
 
 void Utils::takeScreenshot() {
   std::time_t now = std::time(nullptr);
@@ -33,7 +38,7 @@ Vector2 Utils::computeAlignedPosition(const char *text, float fontSize,
                                       float padding, int windowWidth,
                                       int windowHeight) {
   Vector2 position = {0, 0};
-  float textWidth = MeasureText(text, fontSize);
+  float textWidth = MeasureTextEx(font, text, fontSize, 2).x;
 
   switch (horizontalAlignment) {
   case HorizontalAlignment::RIGHT:
@@ -69,5 +74,5 @@ void Utils::drawAlignedText(const char *text, float fontSize, Color color,
   Vector2 position = computeAlignedPosition(text, fontSize, horizontalAlignment,
                                             verticalAlignment, padding,
                                             windowWidth, windowHeight);
-  DrawText(text, position.x, position.y, fontSize, color);
+  DrawTextEx(font, text, position, fontSize, 2, color);
 }
