@@ -16,6 +16,7 @@ private:
   Snake snake;
   Position foodPosition;
   int score;
+  float startTime;
   float timeSinceLastMove;
 
   void handleInput();

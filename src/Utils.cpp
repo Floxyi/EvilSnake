@@ -3,6 +3,15 @@
 #include "../include/Snake.h"
 #include "raylib.h"
 
+void Utils::takeScreenshot() {
+  std::time_t now = std::time(nullptr);
+  std::tm *localTime = std::localtime(&now);
+  char timeBuffer[32];
+  std::strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d_%H-%M-%S", localTime);
+  std::string filename = "Screenshot_" + std::string(timeBuffer) + ".png";
+  TakeScreenshot(filename.c_str());
+}
+
 Position Utils::getRandomGridPosition(int gridSize, int windowWidth,
                                       int windowHeight) {
   int x = GetRandomValue(0, (windowWidth / gridSize) - 1) * gridSize;

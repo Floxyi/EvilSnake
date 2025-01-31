@@ -6,7 +6,7 @@
 Game::Game(int width, int height, int gridSize)
     : windowWidth(width), windowHeight(height), gridSize(gridSize),
       state(GameState::MENU), score(0), timeSinceLastMove(0.0f),
-      snake(gridSize) {
+      snake(gridSize), startTime(0.0f) {
   foodPosition =
       Utils::getRandomGridPosition(gridSize, windowWidth, windowHeight);
 }
@@ -15,6 +15,7 @@ void Game::reset() {
   this->score = 0;
   this->snake.reset();
   state = GameState::MENU;
+  startTime = 0.0f;
 }
 
 bool Game::isGameFinished() const {
@@ -23,6 +24,10 @@ bool Game::isGameFinished() const {
 }
 
 void Game::handleInput() {
+  if (IsKeyPressed(KEY_S)) {
+    Utils::takeScreenshot();
+  }
+
   if (state == GameState::PLAYING && IsKeyPressed(KEY_SPACE)) {
     reset();
   }
@@ -65,6 +70,10 @@ void Game::update(float deltaTime) {
   }
 
   if (state == GameState::PLAYING) {
+    if (startTime == 0.0f) {
+      startTime = GetTime();
+    }
+
     timeSinceLastMove += deltaTime;
 
     if (timeSinceLastMove >= Constants::SNAKE_SPEED) {
@@ -114,23 +123,19 @@ void Game::drawGameFinishedScreen() {
       (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50, windowWidth,
       windowHeight);
-  Utils::drawAlignedText("Press the [SPACE] key to get back to the menu", 20,
-                         DARKGRAY, VerticalAlignment::CENTER,
-                         HorizontalAlignment::CENTER, 50, windowWidth,
-                         windowHeight);
+  Utils::drawAlignedText("[SPACE] - Back to main menu", 20, DARKGRAY,
+                         VerticalAlignment::CENTER, HorizontalAlignment::CENTER,
+                         50, windowWidth, windowHeight);
 }
 
 void Game::drawMenuScreen() {
   Utils::drawAlignedText("Welcome to EvilSnake!", 40, DARKGRAY,
                          VerticalAlignment::TOP, HorizontalAlignment::CENTER,
                          50, windowWidth, windowHeight);
-  Utils::drawAlignedText("Press the [UP ARROW] key to start the game", 20,
-                         DARKGRAY, VerticalAlignment::TOP,
-                         HorizontalAlignment::CENTER, 120, windowWidth,
-                         windowHeight);
-  Utils::drawAlignedText("(play with arrow keys)", 20, DARKGRAY,
-                         VerticalAlignment::TOP, HorizontalAlignment::CENTER,
-                         150, windowWidth, windowHeight);
+  Utils::drawAlignedText(
+      "Press the [ARROW KEYS] key to start and play the game", 20, DARKGRAY,
+      VerticalAlignment::TOP, HorizontalAlignment::CENTER, 120, windowWidth,
+      windowHeight);
   Utils::drawAlignedText("Made by Florian", 20, DARKGRAY,
                          VerticalAlignment::BOTTOM, HorizontalAlignment::LEFT,
                          10, windowWidth, windowHeight);
@@ -143,20 +148,34 @@ void Game::drawMenuScreen() {
 }
 
 void Game::drawPlayingScreen() {
+  float elapsedTime =
+      state == GameState::PLAYING ? GetTime() - startTime : 0.0f;
+
+  int minutes = static_cast<int>(elapsedTime) / 60;
+  int seconds = static_cast<int>(elapsedTime) % 60;
+  int milliseconds =
+      static_cast<int>((elapsedTime - static_cast<int>(elapsedTime)) * 100);
+
+  std::string timeString =
+      (minutes < 10 ? "0" : "") + std::to_string(minutes) + ":" +
+      (seconds < 10 ? "0" : "") + std::to_string(seconds) + ":" +
+      (milliseconds < 10 ? "0" : "") + std::to_string(milliseconds);
+
   Utils::drawAlignedText(
       (std::string("Score: ") + std::to_string(score)).c_str(), 20, DARKGRAY,
       VerticalAlignment::TOP, HorizontalAlignment::LEFT, 10, windowWidth,
       windowHeight);
-  Utils::drawAlignedText("Press the [SPACE] key to get back to the menu", 20,
-                         DARKGRAY, VerticalAlignment::BOTTOM,
-                         HorizontalAlignment::CENTER, 10, windowWidth,
-                         windowHeight);
+  Utils::drawAlignedText(("Time: " + timeString).c_str(), 20, DARKGRAY,
+                         VerticalAlignment::TOP, HorizontalAlignment::RIGHT, 10,
+                         windowWidth, windowHeight);
+  Utils::drawAlignedText("[SPACE] - Quit to main menu", 20, DARKGRAY,
+                         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER,
+                         10, windowWidth, windowHeight);
 }
 
 void Game::draw() {
   ClearBackground(Constants::BACKGROUND_COLOR);
   drawGrid(gridSize, LIGHTGRAY);
-  DrawFPS(GetScreenWidth() - 110, 10);
 
   DrawRectangle(foodPosition.x, foodPosition.y, gridSize, gridSize, RED);
   snake.draw();
@@ -183,7 +202,6 @@ void Game::run() {
   // int display = GetCurrentMonitor();
   // windowWidth = GetMonitorWidth(display);
   // windowHeight = GetMonitorHeight(display);
-
   // SetWindowSize(windowWidth, windowHeight);
   // ToggleFullscreen();
 

@@ -10,6 +10,7 @@ enum class HorizontalAlignment { LEFT, CENTER, RIGHT };
 
 class Utils {
 public:
+  static void takeScreenshot();
   static Position getRandomGridPosition(int gridSize, int windowWidth,
                                         int windowHeight);
   static Position getRandomFoodPosition(Snake &snake, int gridSize,
