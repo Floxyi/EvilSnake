@@ -9,11 +9,12 @@ set(SOURCES
     src/Game.cpp
     src/Snake.cpp
     src/Utils.cpp
+    src/SoundManager.cpp
 )
 
 include_directories(src)
 
-add_executable(SnakeGame ${SOURCES})
+add_executable(EvilSnake ${SOURCES})
 
 find_package(raylib REQUIRED)
-target_link_libraries(SnakeGame raylib)
+target_link_libraries(EvilSnake raylib)

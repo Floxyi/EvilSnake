@@ -1,5 +1,5 @@
 BUILD_DIR = build
-GAME = $(BUILD_DIR)/SnakeGame
+GAME = $(BUILD_DIR)/EvilSnake
 
 all: $(BUILD_DIR) $(GAME)
 

@@ -1,7 +1,10 @@
 #include "../include/Game.h"
 #include "../include/Constants.h"
+#include "../include/SoundManager.h"
 #include "../include/Utils.h"
 #include "raylib.h"
+
+SoundManager soundManager;
 
 Game::Game(int width, int height, int gridSize)
     : windowWidth(width), windowHeight(height), gridSize(gridSize),
@@ -80,6 +83,7 @@ void Game::update(float deltaTime) {
       timeSinceLastMove = 0.0f;
 
       if (snake.move(foodPosition)) {
+        soundManager.play("eat");
         score++;
         foodPosition = Utils::getRandomFoodPosition(snake, gridSize,
                                                     windowWidth, windowHeight);
@@ -203,6 +207,7 @@ void Game::run() {
   UnloadImage(icon);
 
   Utils::initializeFont("assets/fonts/ThaleahFat.ttf");
+  soundManager.load("eat", "assets/sounds/eat.wav");
 
   // int display = GetCurrentMonitor();
   // windowWidth = GetMonitorWidth(display);
