@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Position.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -14,7 +13,7 @@ private:
   int gridSize;
   GameState state;
   Snake snake;
-  Position foodPosition;
+  Vector2 foodPosition;
   int score;
   float startTime;
   float timeSinceLastMove;

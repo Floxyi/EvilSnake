@@ -1,5 +1,4 @@
 #include "../include/Utils.h"
-#include "../include/Position.h"
 #include "../include/Snake.h"
 #include "raylib.h"
 
@@ -12,28 +11,28 @@ void Utils::takeScreenshot() {
   TakeScreenshot(filename.c_str());
 }
 
-Position Utils::getRandomGridPosition(int gridSize, int windowWidth,
-                                      int windowHeight) {
+Vector2 Utils::getRandomGridPosition(int gridSize, int windowWidth,
+                                     int windowHeight) {
   int x = GetRandomValue(0, (windowWidth / gridSize) - 1) * gridSize;
   int y = GetRandomValue(0, (windowHeight / gridSize) - 1) * gridSize;
-  return {x, y};
+  return {(float)x, (float)y};
 }
 
-Position Utils::getRandomFoodPosition(Snake &snake, int gridSize,
-                                      int windowWidth, int windowHeight) {
-  Position position;
+Vector2 Utils::getRandomFoodPosition(Snake &snake, int gridSize,
+                                     int windowWidth, int windowHeight) {
+  Vector2 position;
   do {
     position = getRandomGridPosition(gridSize, windowWidth, windowHeight);
   } while (snake.isOnSnake(position));
   return position;
 }
 
-Position Utils::computeAlignedPosition(const char *text, float fontSize,
-                                       HorizontalAlignment horizontalAlignment,
-                                       VerticalAlignment verticalAlignment,
-                                       float padding, int windowWidth,
-                                       int windowHeight) {
-  Position position = {0, 0};
+Vector2 Utils::computeAlignedPosition(const char *text, float fontSize,
+                                      HorizontalAlignment horizontalAlignment,
+                                      VerticalAlignment verticalAlignment,
+                                      float padding, int windowWidth,
+                                      int windowHeight) {
+  Vector2 position = {0, 0};
   float textWidth = MeasureText(text, fontSize);
 
   switch (horizontalAlignment) {
@@ -67,8 +66,8 @@ void Utils::drawAlignedText(const char *text, float fontSize, Color color,
                             VerticalAlignment verticalAlignment,
                             HorizontalAlignment horizontalAlignment,
                             float padding, int windowWidth, int windowHeight) {
-  Position position = computeAlignedPosition(
-      text, fontSize, horizontalAlignment, verticalAlignment, padding,
-      windowWidth, windowHeight);
+  Vector2 position = computeAlignedPosition(text, fontSize, horizontalAlignment,
+                                            verticalAlignment, padding,
+                                            windowWidth, windowHeight);
   DrawText(text, position.x, position.y, fontSize, color);
 }

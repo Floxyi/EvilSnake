@@ -2,7 +2,7 @@
 #include "raylib.h"
 
 Snake::Snake(int grid) : gridSize(grid), direction(Direction::NONE) {
-  body.push_back({gridSize * 5, gridSize * 5});
+  body.push_back({(float)gridSize * 5, (float)gridSize * 5});
 }
 
 void Snake::setDirection(Direction dir) {
@@ -16,8 +16,8 @@ void Snake::setDirection(Direction dir) {
   }
 }
 
-bool Snake::move(const Position &foodPosition) {
-  Position head = body.front();
+bool Snake::move(const Vector2 &foodPosition) {
+  Vector2 head = body.front();
 
   switch (direction) {
   case Direction::UP:
@@ -36,8 +36,8 @@ bool Snake::move(const Position &foodPosition) {
     break;
   }
 
-  head.x = (head.x + GetScreenWidth()) % GetScreenWidth();
-  head.y = (head.y + GetScreenHeight()) % GetScreenHeight();
+  head.x = (int)(head.x + GetScreenWidth()) % GetScreenWidth();
+  head.y = (int)(head.y + GetScreenHeight()) % GetScreenHeight();
   body.insert(body.begin(), head);
 
   if (head.x == foodPosition.x && head.y == foodPosition.y) {
@@ -49,7 +49,7 @@ bool Snake::move(const Position &foodPosition) {
 }
 
 bool Snake::hasCollided() const {
-  const Position &head = body.front();
+  const Vector2 &head = body.front();
   for (size_t i = 1; i < body.size(); ++i) {
     if (body[i].x == head.x && body[i].y == head.y) {
       return true;
@@ -59,19 +59,19 @@ bool Snake::hasCollided() const {
 }
 
 void Snake::draw() const {
-  for (const Position &bodyPart : body) {
+  for (const Vector2 &bodyPart : body) {
     DrawRectangle(bodyPart.x, bodyPart.y, gridSize, gridSize, DARKGREEN);
   }
 }
 
 void Snake::reset() {
   body.clear();
-  body.push_back({gridSize * 5, gridSize * 5});
+  body.push_back({(float)gridSize * 5, (float)gridSize * 5});
   direction = Direction::RIGHT;
 }
 
-bool Snake::isOnSnake(Position position) const {
-  for (const Position &bodyPart : body) {
+bool Snake::isOnSnake(Vector2 position) const {
+  for (const Vector2 &bodyPart : body) {
     if (bodyPart.x == position.x && bodyPart.y == position.y) {
       return true;
     }

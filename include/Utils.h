@@ -1,7 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "Position.h"
 #include "Snake.h"
 #include "raylib.h"
 
@@ -11,10 +10,10 @@ enum class HorizontalAlignment { LEFT, CENTER, RIGHT };
 class Utils {
 public:
   static void takeScreenshot();
-  static Position getRandomGridPosition(int gridSize, int windowWidth,
-                                        int windowHeight);
-  static Position getRandomFoodPosition(Snake &snake, int gridSize,
-                                        int windowWidth, int windowHeight);
+  static Vector2 getRandomGridPosition(int gridSize, int windowWidth,
+                                       int windowHeight);
+  static Vector2 getRandomFoodPosition(Snake &snake, int gridSize,
+                                       int windowWidth, int windowHeight);
 
   static void drawAlignedText(const char *text, float fontSize, Color color,
                               VerticalAlignment verticalAlignment,
@@ -22,11 +21,11 @@ public:
                               float padding, int windowWidth, int windowHeight);
 
 private:
-  static Position
-  computeAlignedPosition(const char *text, float fontSize,
-                         HorizontalAlignment horizontalAlignment,
-                         VerticalAlignment verticalAlignment, float padding,
-                         int windowWidth, int windowHeight);
+  static Vector2 computeAlignedPosition(const char *text, float fontSize,
+                                        HorizontalAlignment horizontalAlignment,
+                                        VerticalAlignment verticalAlignment,
+                                        float padding, int windowWidth,
+                                        int windowHeight);
 };
 
 #endif

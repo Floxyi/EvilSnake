@@ -81,8 +81,8 @@ void Game::update(float deltaTime) {
 
       if (snake.move(foodPosition)) {
         score++;
-        foodPosition =
-            Utils::getRandomGridPosition(gridSize, windowWidth, windowHeight);
+        foodPosition = Utils::getRandomFoodPosition(snake, gridSize,
+                                                    windowWidth, windowHeight);
       }
 
       if (snake.hasCollided()) {
