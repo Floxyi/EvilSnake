@@ -18,10 +18,6 @@ void Game::reset() {
 }
 
 void Game::handleInput() {
-  if (state == GameState::MENU && IsKeyPressed(KEY_UP)) {
-    state = GameState::PLAYING;
-  }
-
   if (state == GameState::PLAYING && IsKeyPressed(KEY_SPACE)) {
     reset();
   }
@@ -30,15 +26,31 @@ void Game::handleInput() {
     reset();
   }
 
-  if (state == GameState::PLAYING) {
-    if (IsKeyPressed(KEY_UP))
+  if (state == GameState::PLAYING || state == GameState::MENU) {
+    if (IsKeyPressed(KEY_UP)) {
+      if (state == GameState::MENU) {
+        state = GameState::PLAYING;
+      }
       snake.setDirection(Direction::UP);
-    if (IsKeyPressed(KEY_DOWN))
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+      if (state == GameState::MENU) {
+        state = GameState::PLAYING;
+      }
       snake.setDirection(Direction::DOWN);
-    if (IsKeyPressed(KEY_LEFT))
+    }
+    if (IsKeyPressed(KEY_LEFT)) {
+      if (state == GameState::MENU) {
+        state = GameState::PLAYING;
+      }
       snake.setDirection(Direction::LEFT);
-    if (IsKeyPressed(KEY_RIGHT))
+    }
+    if (IsKeyPressed(KEY_RIGHT)) {
+      if (state == GameState::MENU) {
+        state = GameState::PLAYING;
+      }
       snake.setDirection(Direction::RIGHT);
+    }
   }
 }
 
@@ -96,12 +108,15 @@ void Game::drawMenuScreen() {
   Utils::drawAlignedText("(play with arrow keys)", 20, DARKGRAY,
                          VerticalAlignment::TOP, HorizontalAlignment::CENTER,
                          150, windowWidth, windowHeight);
-  Utils::drawAlignedText("v1.0", 20, DARKGRAY, VerticalAlignment::BOTTOM,
-                         HorizontalAlignment::RIGHT, 10, windowWidth,
-                         windowHeight);
   Utils::drawAlignedText("Made by Florian", 20, DARKGRAY,
                          VerticalAlignment::BOTTOM, HorizontalAlignment::LEFT,
                          10, windowWidth, windowHeight);
+  Utils::drawAlignedText("[ESC] - Quit", 20, DARKGRAY,
+                         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER,
+                         10, windowWidth, windowHeight);
+  Utils::drawAlignedText("v1.0", 20, DARKGRAY, VerticalAlignment::BOTTOM,
+                         HorizontalAlignment::RIGHT, 10, windowWidth,
+                         windowHeight);
 }
 
 void Game::drawPlayingScreen() {
@@ -120,6 +135,9 @@ void Game::draw() {
   drawGrid(gridSize, LIGHTGRAY);
   DrawFPS(GetScreenWidth() - 110, 10);
 
+  DrawRectangle(foodPosition.x, foodPosition.y, gridSize, gridSize, RED);
+  snake.draw();
+
   switch (state) {
   case GameState::MENU:
     drawMenuScreen();
@@ -131,17 +149,14 @@ void Game::draw() {
     drawGameOverScreen();
     break;
   }
-
-  DrawRectangle(foodPosition.x, foodPosition.y, gridSize, gridSize, RED);
-  snake.draw();
 }
 
 void Game::run() {
   InitWindow(windowWidth, windowHeight, "Evil Snake");
 
   // int display = GetCurrentMonitor();
-  //  windowWidth = GetMonitorWidth(display);
-  //  windowHeight = GetMonitorHeight(display);
+  // windowWidth = GetMonitorWidth(display);
+  // windowHeight = GetMonitorHeight(display);
 
   // SetWindowSize(windowWidth, windowHeight);
   // ToggleFullscreen();

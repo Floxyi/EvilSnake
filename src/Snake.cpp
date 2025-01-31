@@ -1,7 +1,7 @@
 #include "../include/Snake.h"
 #include "raylib.h"
 
-Snake::Snake(int grid) : gridSize(grid), direction(Direction::RIGHT) {
+Snake::Snake(int grid) : gridSize(grid), direction(Direction::NONE) {
   body.push_back({gridSize * 5, gridSize * 5});
 }
 

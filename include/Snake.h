@@ -4,7 +4,7 @@
 #include "Position.h"
 #include <vector>
 
-enum class Direction { UP, DOWN, LEFT, RIGHT };
+enum class Direction { NONE, UP, DOWN, LEFT, RIGHT };
 
 class Snake {
 private:
