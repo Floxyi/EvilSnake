@@ -1,5 +1,9 @@
 #include "../include/SoundManager.h"
 
+const int SoundManager::SOUND_EAT = 1;
+const int SoundManager::SOUND_EXPLOSION = 2;
+const int SoundManager::SOUND_START = 3;
+
 SoundManager::SoundManager() { InitAudioDevice(); }
 
 SoundManager::~SoundManager() {
@@ -9,15 +13,20 @@ SoundManager::~SoundManager() {
   CloseAudioDevice();
 }
 
-void SoundManager::load(const std::string &name, const std::string &filePath) {
-  if (sounds.find(name) == sounds.end()) {
-    Sound newSound = LoadSound(filePath.c_str());
-    sounds[name] = newSound;
-  }
+SoundManager &SoundManager::getInstance() {
+  static SoundManager instance;
+  return instance;
 }
 
-void SoundManager::play(const std::string &name) {
-  if (sounds.find(name) != sounds.end()) {
-    PlaySound(sounds[name]);
+void SoundManager::initSounds() {
+  sounds[SOUND_EAT] = LoadSound("assets/sounds/eat.wav");
+  sounds[SOUND_EXPLOSION] = LoadSound("assets/sounds/explosion.wav");
+  sounds[SOUND_START] = LoadSound("assets/sounds/start.wav");
+}
+
+void SoundManager::play(int soundId) {
+  auto it = sounds.find(soundId);
+  if (it != sounds.end()) {
+    PlaySound(it->second);
   }
 }

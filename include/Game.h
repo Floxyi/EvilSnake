@@ -29,6 +29,12 @@ private:
   void reset();
   bool isGameFinished() const;
 
+  void takeScreenshot() const;
+  Vector2 getRandomGridPosition(int gridSize, int windowWidth,
+                                int windowHeight) const;
+  Vector2 getRandomFoodPosition(Snake &snake, int gridSize, int windowWidth,
+                                int windowHeight) const;
+
 public:
   Game(int width, int height, int grid);
   void run();
