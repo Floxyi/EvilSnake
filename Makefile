@@ -1,12 +1,12 @@
 BUILD_DIR = build
-GAME = $(BUILD_DIR)/game
+GAME = $(BUILD_DIR)/SnakeGame
 
 all: $(BUILD_DIR) $(GAME)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(wildcard src/*.cpp include/*.h)
 
 $(GAME): $(SOURCES)
 	cd $(BUILD_DIR) && cmake .. && cmake --build .

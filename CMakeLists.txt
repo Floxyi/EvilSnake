@@ -1,11 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
-project(EvilSnake VERSION 1.0)
+project(EvilSnake)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(SOURCES
+    src/main.cpp
+    src/Game.cpp
+    src/Snake.cpp
+    src/Utils.cpp
+)
+
+include_directories(src)
+
+add_executable(SnakeGame ${SOURCES})
+
 find_package(raylib REQUIRED)
-
-add_executable(game src/main.cpp)
-
-target_link_libraries(game raylib)
+target_link_libraries(SnakeGame raylib)
