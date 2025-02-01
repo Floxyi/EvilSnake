@@ -25,8 +25,8 @@ void SoundManager::initSounds() {
 }
 
 void SoundManager::play(int soundId) {
-  auto it = sounds.find(soundId);
-  if (it != sounds.end()) {
-    PlaySound(it->second);
+  auto soundMap = sounds.find(soundId);
+  if (soundMap != sounds.end()) {
+    PlaySound(soundMap->second);
   }
 }

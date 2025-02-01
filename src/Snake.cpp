@@ -16,7 +16,7 @@ void Snake::setDirection(Direction dir) {
   }
 }
 
-bool Snake::move(const Vector2 &foodPosition) {
+bool Snake::moveAndCheckForFood(const Vector2 &foodPosition) {
   Vector2 head = body.front();
 
   switch (direction) {

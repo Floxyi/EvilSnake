@@ -22,9 +22,9 @@ void FontManager::initFonts() {
 }
 
 Font FontManager::getFont(int fontId) const {
-  auto it = fonts.find(fontId);
-  if (it != fonts.end()) {
-    return it->second;
+  auto fontMap = fonts.find(fontId);
+  if (fontMap != fonts.end()) {
+    return fontMap->second;
   }
   return Font{};
 }

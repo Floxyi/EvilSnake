@@ -2,37 +2,50 @@
 #include "../include/Constants.h"
 #include "../include/FontManager.h"
 
+namespace {
+
+float computeHorizontalPosition(HorizontalAlignment alignment, float textWidth,
+                                float padding) {
+  switch (alignment) {
+  case HorizontalAlignment::RIGHT:
+    return Constants::WINDOW_WIDTH - textWidth - padding;
+  case HorizontalAlignment::CENTER:
+    return (Constants::WINDOW_WIDTH - textWidth) / 2;
+  case HorizontalAlignment::LEFT:
+    return padding;
+  default:
+    return padding;
+  }
+}
+
+float computeVerticalPosition(VerticalAlignment alignment, float fontSize,
+                              float padding) {
+  switch (alignment) {
+  case VerticalAlignment::BOTTOM:
+    return Constants::WINDOW_HEIGHT - fontSize - padding;
+  case VerticalAlignment::CENTER:
+    return (Constants::WINDOW_HEIGHT - fontSize) / 2 + padding;
+  case VerticalAlignment::TOP:
+    return padding;
+  default:
+    return padding;
+  }
+}
+
+} // namespace
+
 Vector2
 TextUtils::computeAlignedPosition(const char *text, Font font, float fontSize,
                                   HorizontalAlignment horizontalAlignment,
                                   VerticalAlignment verticalAlignment,
                                   float padding) {
   Vector2 position = {0, 0};
+
   float textWidth = MeasureTextEx(font, text, fontSize, 2).x;
 
-  switch (horizontalAlignment) {
-  case HorizontalAlignment::RIGHT:
-    position.x = Constants::WINDOW_WIDTH - textWidth - padding;
-    break;
-  case HorizontalAlignment::CENTER:
-    position.x = (Constants::WINDOW_WIDTH - textWidth) / 2;
-    break;
-  case HorizontalAlignment::LEFT:
-    position.x = padding;
-    break;
-  }
-
-  switch (verticalAlignment) {
-  case VerticalAlignment::BOTTOM:
-    position.y = Constants::WINDOW_HEIGHT - fontSize - padding;
-    break;
-  case VerticalAlignment::CENTER:
-    position.y = (Constants::WINDOW_HEIGHT - fontSize) / 2 + padding;
-    break;
-  case VerticalAlignment::TOP:
-    position.y = padding;
-    break;
-  }
+  position.x =
+      computeHorizontalPosition(horizontalAlignment, textWidth, padding);
+  position.y = computeVerticalPosition(verticalAlignment, fontSize, padding);
 
   return position;
 }

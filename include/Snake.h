@@ -17,7 +17,7 @@ private:
 public:
   explicit Snake(int grid);
   void setDirection(Direction dir);
-  bool move(const Vector2 &foodPosition);
+  bool moveAndCheckForFood(const Vector2 &foodPosition);
   bool hasCollided() const;
   void draw() const;
   void reset();

@@ -9,7 +9,7 @@ Game::Game(int width, int height, int gridSize)
     : windowWidth(width), windowHeight(height), gridSize(gridSize),
       state(GameState::MENU), score(0), timeSinceLastMove(0.0f),
       snake(gridSize), startTime(0.0f) {
-  foodPosition = getRandomGridPosition(gridSize, windowWidth, windowHeight);
+  foodPosition = getRandomGridPosition();
 }
 
 void Game::takeScreenshot() const {
@@ -21,18 +21,20 @@ void Game::takeScreenshot() const {
   TakeScreenshot(filename.c_str());
 }
 
-Vector2 Game::getRandomGridPosition(int gridSize, int windowWidth,
-                                    int windowHeight) const {
-  int x = GetRandomValue(0, (windowWidth / gridSize) - 1) * gridSize;
-  int y = GetRandomValue(0, (windowHeight / gridSize) - 1) * gridSize;
+Vector2 Game::getRandomGridPosition() const {
+  int x =
+      GetRandomValue(0, (Constants::WINDOW_WIDTH / Constants::GRID_SIZE) - 1) *
+      Constants::GRID_SIZE;
+  int y =
+      GetRandomValue(0, (Constants::WINDOW_HEIGHT / Constants::GRID_SIZE) - 1) *
+      Constants::GRID_SIZE;
   return {(float)x, (float)y};
 }
 
-Vector2 Game::getRandomFoodPosition(Snake &snake, int gridSize, int windowWidth,
-                                    int windowHeight) const {
+Vector2 Game::getRandomFoodPosition(Snake &snake) const {
   Vector2 position;
   do {
-    position = getRandomGridPosition(gridSize, windowWidth, windowHeight);
+    position = getRandomGridPosition();
   } while (snake.isOnSnake(position));
   return position;
 }
@@ -54,44 +56,34 @@ void Game::handleInput() {
     takeScreenshot();
   }
 
-  if (state == GameState::PLAYING && IsKeyPressed(KEY_SPACE)) {
-    reset();
-  }
-
-  if (state == GameState::GAME_OVER && IsKeyPressed(KEY_SPACE)) {
-    reset();
+  if (state == GameState::PLAYING || state == GameState::GAME_OVER) {
+    if (IsKeyPressed(KEY_SPACE)) {
+      reset();
+    }
   }
 
   if (state == GameState::PLAYING || state == GameState::MENU) {
     if (IsKeyPressed(KEY_UP)) {
-      if (state == GameState::MENU) {
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-        state = GameState::PLAYING;
-      }
-      snake.setDirection(Direction::UP);
+      handleDirectionChange(Direction::UP);
     }
     if (IsKeyPressed(KEY_DOWN)) {
-      if (state == GameState::MENU) {
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-        state = GameState::PLAYING;
-      }
-      snake.setDirection(Direction::DOWN);
+      handleDirectionChange(Direction::DOWN);
     }
     if (IsKeyPressed(KEY_LEFT)) {
-      if (state == GameState::MENU) {
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-        state = GameState::PLAYING;
-      }
-      snake.setDirection(Direction::LEFT);
+      handleDirectionChange(Direction::LEFT);
     }
     if (IsKeyPressed(KEY_RIGHT)) {
-      if (state == GameState::MENU) {
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-        state = GameState::PLAYING;
-      }
-      snake.setDirection(Direction::RIGHT);
+      handleDirectionChange(Direction::RIGHT);
     }
   }
+}
+
+void Game::handleDirectionChange(Direction dir) {
+  if (state == GameState::MENU) {
+    SoundManager::getInstance().play(SoundManager::SOUND_START);
+    state = GameState::PLAYING;
+  }
+  snake.setDirection(dir);
 }
 
 void Game::update(float deltaTime) {
@@ -99,27 +91,28 @@ void Game::update(float deltaTime) {
     state = GameState::FINISHED;
   }
 
-  if (state == GameState::PLAYING) {
-    if (startTime == 0.0f) {
-      startTime = GetTime();
+  if (state != GameState::PLAYING) {
+    return;
+  }
+
+  if (startTime == 0.0f) {
+    startTime = GetTime();
+  }
+
+  timeSinceLastMove += deltaTime;
+
+  if (timeSinceLastMove >= Constants::SNAKE_SPEED) {
+    timeSinceLastMove = 0.0f;
+
+    if (snake.moveAndCheckForFood(foodPosition)) {
+      SoundManager::getInstance().play(SoundManager::SOUND_EAT);
+      score++;
+      foodPosition = getRandomFoodPosition(snake);
     }
 
-    timeSinceLastMove += deltaTime;
-
-    if (timeSinceLastMove >= Constants::SNAKE_SPEED) {
-      timeSinceLastMove = 0.0f;
-
-      if (snake.move(foodPosition)) {
-        SoundManager::getInstance().play(SoundManager::SOUND_EAT);
-        score++;
-        foodPosition =
-            getRandomFoodPosition(snake, gridSize, windowWidth, windowHeight);
-      }
-
-      if (snake.hasCollided()) {
-        SoundManager::getInstance().play(SoundManager::SOUND_EXPLOSION);
-        state = GameState::GAME_OVER;
-      }
+    if (snake.hasCollided()) {
+      SoundManager::getInstance().play(SoundManager::SOUND_EXPLOSION);
+      state = GameState::GAME_OVER;
     }
   }
 }
@@ -138,9 +131,8 @@ void Game::drawGameOverScreen() {
                              VerticalAlignment::CENTER,
                              HorizontalAlignment::CENTER, -100);
   TextUtils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(),
-      FontManager::FONT_MAIN, 30, DARKGRAY, VerticalAlignment::CENTER,
-      HorizontalAlignment::CENTER, -50);
+      ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
+      DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50);
   TextUtils::drawAlignedText(
       "Press the [SPACE] key to get back to the menu", FontManager::FONT_MAIN,
       30, DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
@@ -151,9 +143,8 @@ void Game::drawGameFinishedScreen() {
       "YOU WON, CONGRATULATIONS!", FontManager::FONT_MAIN, 60, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -100);
   TextUtils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(),
-      FontManager::FONT_MAIN, 30, DARKGRAY, VerticalAlignment::CENTER,
-      HorizontalAlignment::CENTER, -50);
+      ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
+      DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50);
   TextUtils::drawAlignedText(
       "[SPACE] - Back to main menu", FontManager::FONT_MAIN, 30, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
@@ -179,13 +170,11 @@ void Game::drawMenuScreen() {
 }
 
 void Game::drawPlayingScreen() {
-  float elapsedTime =
-      state == GameState::PLAYING ? GetTime() - startTime : 0.0f;
+  float elapsedTime = GetTime() - startTime;
 
-  int minutes = static_cast<int>(elapsedTime) / 60;
-  int seconds = static_cast<int>(elapsedTime) % 60;
-  int milliseconds =
-      static_cast<int>((elapsedTime - static_cast<int>(elapsedTime)) * 100);
+  int minutes = elapsedTime / 60;
+  int seconds = (int)(elapsedTime) % 60;
+  int milliseconds = ((elapsedTime - static_cast<int>(elapsedTime)) * 100);
 
   std::string timeString =
       (minutes < 10 ? "0" : "") + std::to_string(minutes) + ":" +
@@ -193,9 +182,8 @@ void Game::drawPlayingScreen() {
       (milliseconds < 10 ? "0" : "") + std::to_string(milliseconds);
 
   TextUtils::drawAlignedText(
-      (std::string("Score: ") + std::to_string(score)).c_str(),
-      FontManager::FONT_MAIN, 30, DARKGRAY, VerticalAlignment::TOP,
-      HorizontalAlignment::RIGHT, 10);
+      ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
+      DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::RIGHT, 10);
   TextUtils::drawAlignedText(
       ("Time: " + timeString).c_str(), FontManager::FONT_MAIN, 30, DARKGRAY,
       VerticalAlignment::TOP, HorizontalAlignment::LEFT, 10);

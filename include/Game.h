@@ -18,22 +18,22 @@ private:
   float startTime;
   float timeSinceLastMove;
 
-  void handleInput();
   void update(float deltaTime);
+  void reset();
+  bool isGameFinished() const;
+  void handleInput();
+  void handleDirectionChange(Direction dir);
+
   void draw();
   void drawGrid(int gridSize, Color color);
   void drawGameOverScreen();
   void drawGameFinishedScreen();
   void drawMenuScreen();
   void drawPlayingScreen();
-  void reset();
-  bool isGameFinished() const;
 
   void takeScreenshot() const;
-  Vector2 getRandomGridPosition(int gridSize, int windowWidth,
-                                int windowHeight) const;
-  Vector2 getRandomFoodPosition(Snake &snake, int gridSize, int windowWidth,
-                                int windowHeight) const;
+  Vector2 getRandomGridPosition() const;
+  Vector2 getRandomFoodPosition(Snake &snake) const;
 
 public:
   Game(int width, int height, int grid);
