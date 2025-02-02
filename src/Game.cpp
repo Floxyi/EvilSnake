@@ -333,7 +333,7 @@ void Game::drawPauseScreen() {
 }
 
 void Game::draw() {
-  ClearBackground(Constants::BACKGROUND_COLOR);
+  ClearBackground(RAYWHITE);
   drawGrid(LIGHTGRAY);
 
   DrawRectangle(foodPosition.x, foodPosition.y, Constants::GRID_SIZE,

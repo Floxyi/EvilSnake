@@ -1,8 +1,6 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "raylib.h"
-
 namespace Constants {
 constexpr float WINDOW_HEIGHT = 600;
 
@@ -15,8 +13,6 @@ constexpr float FAST_SNAKE_SPEED = 0.1f;
 
 constexpr float EVENT_PROBABILITY = 10.0f;
 constexpr int WALL_AMOUNT = 10;
-
-constexpr Color BACKGROUND_COLOR = RAYWHITE;
 } // namespace Constants
 
 #endif
