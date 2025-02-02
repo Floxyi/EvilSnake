@@ -5,12 +5,10 @@
 #include "../include/TextUtils.h"
 #include "raylib.h"
 
-Game::Game(int width, int height, int gridSize)
-    : windowWidth(width), windowHeight(height), gridSize(gridSize),
-      state(GameState::MENU), score(0), timeSinceLastMove(0.0f),
-      snake(gridSize), startTime(0.0f) {
-  foodPosition = getRandomGridPosition();
-}
+Game::Game()
+    : state(GameState::MENU), score(0), timeSinceLastMove(0.0f),
+      startTime(0.0f), endTime(0.0f), snake(getRandomGridPosition()),
+      foodPosition(getRandomFoodPosition(snake)) {}
 
 void Game::takeScreenshot() const {
   std::time_t now = std::time(nullptr);
@@ -40,10 +38,13 @@ Vector2 Game::getRandomFoodPosition(Snake &snake) const {
 }
 
 void Game::reset() {
-  this->score = 0;
-  this->snake.reset();
-  state = GameState::MENU;
+  score = 0;
   startTime = 0.0f;
+  endTime = 0.0f;
+  state = GameState::MENU;
+
+  snake.resetToPosition(getRandomGridPosition());
+  foodPosition = getRandomFoodPosition(snake);
 }
 
 bool Game::isGameFinished() const {
@@ -56,9 +57,24 @@ void Game::handleInput() {
     takeScreenshot();
   }
 
-  if (state == GameState::PLAYING || state == GameState::GAME_OVER) {
+  if (state == GameState::PLAYING || state == GameState::FINISHED ||
+      state == GameState::GAME_OVER || state == GameState::PAUSED) {
     if (IsKeyPressed(KEY_SPACE)) {
       reset();
+    }
+  }
+
+  if (state == GameState::PLAYING) {
+    if (IsKeyPressed(KEY_P)) {
+      endTime = GetTime();
+      state = GameState::PAUSED;
+    }
+  }
+
+  if (state == GameState::PAUSED) {
+    if (IsKeyPressed(KEY_O)) {
+      endTime = 0.0f;
+      state = GameState::PLAYING;
     }
   }
 
@@ -86,7 +102,7 @@ void Game::handleDirectionChange(Direction dir) {
   snake.setDirection(dir);
 }
 
-void Game::update(float deltaTime) {
+void Game::update() {
   if (isGameFinished()) {
     state = GameState::FINISHED;
   }
@@ -99,7 +115,7 @@ void Game::update(float deltaTime) {
     startTime = GetTime();
   }
 
-  timeSinceLastMove += deltaTime;
+  timeSinceLastMove += GetFrameTime();
 
   if (timeSinceLastMove >= Constants::SNAKE_SPEED) {
     timeSinceLastMove = 0.0f;
@@ -112,41 +128,52 @@ void Game::update(float deltaTime) {
 
     if (snake.hasCollided()) {
       SoundManager::getInstance().play(SoundManager::SOUND_EXPLOSION);
+      endTime = GetTime();
       state = GameState::GAME_OVER;
     }
   }
 }
 
-void Game::drawGrid(int gridSize, Color color) {
-  for (int x = 0; x < windowWidth; x += gridSize) {
-    DrawLine(x, 0, x, windowHeight, color);
+void Game::drawGrid(Color color) {
+  for (int x = 0; x < Constants::WINDOW_WIDTH; x += Constants::GRID_SIZE) {
+    DrawLine(x, 0, x, Constants::WINDOW_HEIGHT, color);
   }
-  for (int y = 0; y < windowHeight; y += gridSize) {
-    DrawLine(0, y, windowWidth, y, color);
+  for (int y = 0; y < Constants::WINDOW_HEIGHT; y += Constants::GRID_SIZE) {
+    DrawLine(0, y, Constants::WINDOW_WIDTH, y, color);
   }
 }
 
 void Game::drawGameOverScreen() {
+  std::string time = getFormattedGameTime(endTime);
+
   TextUtils::drawAlignedText("GAME OVER", FontManager::FONT_MAIN, 60, DARKGRAY,
                              VerticalAlignment::CENTER,
-                             HorizontalAlignment::CENTER, -100);
+                             HorizontalAlignment::CENTER, -120);
   TextUtils::drawAlignedText(
       ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
       DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50);
+  TextUtils::drawAlignedText(("Time: " + time).c_str(), FontManager::FONT_MAIN,
+                             30, DARKGRAY, VerticalAlignment::CENTER,
+                             HorizontalAlignment::CENTER, -70);
   TextUtils::drawAlignedText(
-      "Press the [SPACE] key to get back to the menu", FontManager::FONT_MAIN,
-      30, DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
+      "[SPACE] - Quit to main menu", FontManager::FONT_MAIN, 30, DARKGRAY,
+      VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
 }
 
 void Game::drawGameFinishedScreen() {
+  std::string time = getFormattedGameTime(endTime);
+
   TextUtils::drawAlignedText(
       "YOU WON, CONGRATULATIONS!", FontManager::FONT_MAIN, 60, DARKGRAY,
-      VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -100);
+      VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -120);
   TextUtils::drawAlignedText(
       ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
       DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50);
+  TextUtils::drawAlignedText(("Time: " + time).c_str(), FontManager::FONT_MAIN,
+                             30, DARKGRAY, VerticalAlignment::CENTER,
+                             HorizontalAlignment::CENTER, -70);
   TextUtils::drawAlignedText(
-      "[SPACE] - Back to main menu", FontManager::FONT_MAIN, 30, DARKGRAY,
+      "[SPACE] - Quit to main menu", FontManager::FONT_MAIN, 30, DARKGRAY,
       VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
 }
 
@@ -164,13 +191,19 @@ void Game::drawMenuScreen() {
   TextUtils::drawAlignedText("[ESC] - Quit", FontManager::FONT_MAIN, 20,
                              DARKGRAY, VerticalAlignment::BOTTOM,
                              HorizontalAlignment::CENTER, 10);
+  TextUtils::drawAlignedText("[P/O] - Pause/Continue", FontManager::FONT_MAIN,
+                             20, DARKGRAY, VerticalAlignment::BOTTOM,
+                             HorizontalAlignment::CENTER, 30);
+  TextUtils::drawAlignedText(
+      "[Space] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
+      VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 50);
   TextUtils::drawAlignedText("v1.0", FontManager::FONT_MAIN, 20, DARKGRAY,
                              VerticalAlignment::BOTTOM,
                              HorizontalAlignment::RIGHT, 10);
 }
 
-void Game::drawPlayingScreen() {
-  float elapsedTime = GetTime() - startTime;
+std::string Game::getFormattedGameTime(float until) const {
+  float elapsedTime = until - startTime;
 
   int minutes = elapsedTime / 60;
   int seconds = (int)(elapsedTime) % 60;
@@ -181,22 +214,52 @@ void Game::drawPlayingScreen() {
       (seconds < 10 ? "0" : "") + std::to_string(seconds) + ":" +
       (milliseconds < 10 ? "0" : "") + std::to_string(milliseconds);
 
+  return timeString;
+}
+
+void Game::drawPlayingScreen() {
+  std::string time = getFormattedGameTime(GetTime());
+
   TextUtils::drawAlignedText(
       ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
       DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::RIGHT, 10);
-  TextUtils::drawAlignedText(
-      ("Time: " + timeString).c_str(), FontManager::FONT_MAIN, 30, DARKGRAY,
-      VerticalAlignment::TOP, HorizontalAlignment::LEFT, 10);
+  TextUtils::drawAlignedText(("Time: " + time).c_str(), FontManager::FONT_MAIN,
+                             30, DARKGRAY, VerticalAlignment::TOP,
+                             HorizontalAlignment::LEFT, 10);
   TextUtils::drawAlignedText(
       "[SPACE] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
       VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 10);
+  TextUtils::drawAlignedText("[P] - Pause", FontManager::FONT_MAIN, 20,
+                             DARKGRAY, VerticalAlignment::BOTTOM,
+                             HorizontalAlignment::CENTER, 30);
+}
+
+void Game::drawPauseScreen() {
+  std::string time = getFormattedGameTime(endTime);
+
+  TextUtils::drawAlignedText("Pause", FontManager::FONT_MAIN, 60, DARKGRAY,
+                             VerticalAlignment::CENTER,
+                             HorizontalAlignment::CENTER, -120);
+  TextUtils::drawAlignedText(
+      ("Score: " + std::to_string(score)).c_str(), FontManager::FONT_MAIN, 30,
+      DARKGRAY, VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -50);
+  TextUtils::drawAlignedText(("Time: " + time).c_str(), FontManager::FONT_MAIN,
+                             30, DARKGRAY, VerticalAlignment::CENTER,
+                             HorizontalAlignment::CENTER, -70);
+  TextUtils::drawAlignedText(
+      "[SPACE] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
+      VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 10);
+  TextUtils::drawAlignedText("[O] - Continue", FontManager::FONT_MAIN, 20,
+                             DARKGRAY, VerticalAlignment::BOTTOM,
+                             HorizontalAlignment::CENTER, 30);
 }
 
 void Game::draw() {
   ClearBackground(Constants::BACKGROUND_COLOR);
-  drawGrid(gridSize, LIGHTGRAY);
+  drawGrid(LIGHTGRAY);
 
-  DrawRectangle(foodPosition.x, foodPosition.y, gridSize, gridSize, RED);
+  DrawRectangle(foodPosition.x, foodPosition.y, Constants::GRID_SIZE,
+                Constants::GRID_SIZE, RED);
   snake.draw();
 
   switch (state) {
@@ -205,6 +268,9 @@ void Game::draw() {
     break;
   case GameState::PLAYING:
     drawPlayingScreen();
+    break;
+  case GameState::PAUSED:
+    drawPauseScreen();
     break;
   case GameState::FINISHED:
     drawGameFinishedScreen();
@@ -215,19 +281,22 @@ void Game::draw() {
   }
 }
 
-void Game::run() {
-  InitWindow(windowWidth, windowHeight, "Evil Snake");
+void Game::init() {
+  InitWindow(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT, "Evil Snake");
   Image icon = LoadImage("assets/textures/EvilSnake.png");
   SetWindowIcon(icon);
   UnloadImage(icon);
 
   FontManager::getInstance().initFonts();
   SoundManager::getInstance().initSounds();
+}
+
+void Game::run() {
+  init();
 
   while (!WindowShouldClose()) {
-    float deltaTime = GetFrameTime();
     handleInput();
-    update(deltaTime);
+    update();
 
     BeginDrawing();
     draw();

@@ -10,18 +10,17 @@ class Snake {
 private:
   std::vector<Vector2> body;
   Direction direction;
-  int gridSize;
 
   bool hasEaten(const Vector2 &foodPosition) const;
 
 public:
-  explicit Snake(int grid);
+  Snake(const Vector2 &position);
   void setDirection(Direction dir);
   bool moveAndCheckForFood(const Vector2 &foodPosition);
   bool hasCollided() const;
   void draw() const;
-  void reset();
-  bool isOnSnake(Vector2 position) const;
+  void resetToPosition(const Vector2 &position);
+  bool isOnSnake(const Vector2 &position) const;
 };
 
 #endif
