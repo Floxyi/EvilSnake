@@ -41,7 +41,7 @@ Vector2 Game::getRandomFoodPosition(Snake &snake) const {
         isOnWall = true;
       }
     }
-  } while (snake.isOnSnake(position) && isOnWall);
+  } while (snake.isOnSnake(position) || isOnWall);
   return position;
 }
 
@@ -53,7 +53,7 @@ Vector2 Game::getRandomWallPosition(Snake &snake) const {
     if (position.x == foodPosition.x && position.y == foodPosition.y) {
       isOnFood = true;
     }
-  } while (snake.isOnSnake(position) && isOnFood);
+  } while (snake.isOnSnake(position) || isOnFood);
   return position;
 }
 
@@ -65,6 +65,7 @@ void Game::reset() {
   mode = GameMode::NORMAL;
   wallPositions = {};
 
+  snake.speed = Constants::DEFAULT_SNAKE_SPEED;
   snake.resetToPosition(getRandomGridPosition());
   foodPosition = getRandomWallPosition(snake);
 }
@@ -75,26 +76,26 @@ bool Game::isGameFinished() const {
 }
 
 void Game::handleInput() {
-  if (IsKeyPressed(KEY_E)) {
+  if (IsKeyPressed(Constants::KEY_SCREENSHOT)) {
     takeScreenshot();
   }
 
   if (state == GameState::PLAYING || state == GameState::FINISHED ||
       state == GameState::GAME_OVER || state == GameState::PAUSED) {
-    if (IsKeyPressed(KEY_SPACE)) {
+    if (IsKeyPressed(Constants::KEY_QUIT)) {
       reset();
     }
   }
 
   if (state == GameState::PLAYING) {
-    if (IsKeyPressed(KEY_P)) {
+    if (IsKeyPressed(Constants::KEY_PAUSE)) {
       endTime = GetTime();
       state = GameState::PAUSED;
     }
   }
 
   if (state == GameState::PAUSED) {
-    if (IsKeyPressed(KEY_O)) {
+    if (IsKeyPressed(Constants::KEY_CONTINUE)) {
       endTime = 0.0f;
       state = GameState::PLAYING;
     }
