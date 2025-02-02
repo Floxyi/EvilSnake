@@ -3,7 +3,8 @@
 #include "raylib.h"
 
 Snake::Snake(const Vector2 &position)
-    : direction(Direction::NONE), body{position} {}
+    : speed(Constants::DEFAULT_SNAKE_SPEED), direction(Direction::NONE),
+      body{position} {}
 
 void Snake::setDirection(Direction dir) {
   bool oppositeRight = direction == Direction::RIGHT && dir == Direction::LEFT;
@@ -48,10 +49,15 @@ bool Snake::moveAndCheckForFood(const Vector2 &foodPosition) {
   }
 }
 
-bool Snake::hasCollided() const {
+bool Snake::hasCollided(const std::vector<Vector2> &wallPositions) const {
   const Vector2 &head = body.front();
-  for (size_t i = 1; i < body.size(); ++i) {
+  for (size_t i = 3; i < body.size(); ++i) {
     if (body[i].x == head.x && body[i].y == head.y) {
+      return true;
+    }
+  }
+  for (const Vector2 &wallPosition : wallPositions) {
+    if (head.x == wallPosition.x && head.y == wallPosition.y) {
       return true;
     }
   }
