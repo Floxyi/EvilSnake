@@ -1,6 +1,6 @@
-![EvilSnake Screenshot](/assets/textures/Screenshot.png)
-
 # EvilSnake
+
+![EvilSnake Screenshot](/assets/textures/Screenshot.png)
 
 **EvilSnake** is a simple, engaging 2D game built with C++ and [Raylib](https://www.raylib.com/).
 
