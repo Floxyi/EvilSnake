@@ -18,17 +18,17 @@ Follow these steps to set up the project locally:
 
 **Clone the Repository:**
 
-    ```bash
-    git clone https://github.com/Floxyi/EvilSnake.git
-    cd EvilSnake
-    ```
+```bash
+git clone https://github.com/Floxyi/EvilSnake.git
+cd EvilSnake
+```
 
 ## Usage
 
 **Build and Run the Project:**
 
-    You can compile and run the game using `make`:
+You can compile and run the game using `make`:
 
-    ```bash
-    make run
-    ```
+```bash
+make run
+```
