@@ -1,28 +1,30 @@
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
-#include "raylib.h"
 #include <unordered_map>
 
-class SoundManager {
-public:
-  static SoundManager &getInstance();
+#include "raylib.h"
 
-  void initSounds();
-  void play(int soundId);
+class SoundManager
+{
+   public:
+    static SoundManager &getInstance();
 
-  static const int SOUND_EAT;
-  static const int SOUND_EXPLOSION;
-  static const int SOUND_START;
+    void initSounds();
+    void play(int soundId);
 
-private:
-  SoundManager();
-  ~SoundManager();
+    static const int SOUND_EAT;
+    static const int SOUND_EXPLOSION;
+    static const int SOUND_START;
 
-  SoundManager(const SoundManager &) = delete;
-  SoundManager &operator=(const SoundManager &) = delete;
+   private:
+    SoundManager();
+    ~SoundManager();
 
-  std::unordered_map<int, Sound> sounds;
+    SoundManager(const SoundManager &) = delete;
+    SoundManager &operator=(const SoundManager &) = delete;
+
+    std::unordered_map<int, Sound> sounds;
 };
 
 #endif

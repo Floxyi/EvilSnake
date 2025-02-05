@@ -2,9 +2,9 @@
 #define GAMEMODE_H
 
 enum class GameMode {
-  NORMAL,
-  FAST,
-  WALLS,
+    NORMAL,
+    FAST,
+    WALLS,
 };
 
 #endif

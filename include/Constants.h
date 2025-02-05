@@ -2,7 +2,8 @@
 #define CONSTANTS_H
 
 #include <raylib.h>
-namespace Constants {
+namespace Constants
+{
 constexpr int CELL_AMOUNT_Y = 10;
 constexpr int CELL_AMOUNT_X = 15;
 
@@ -20,6 +21,6 @@ constexpr KeyboardKey KEY_PAUSE = KeyboardKey::KEY_J;
 constexpr KeyboardKey KEY_CONTINUE = KeyboardKey::KEY_K;
 constexpr KeyboardKey KEY_SCREENSHOT = KeyboardKey::KEY_L;
 constexpr KeyboardKey KEY_QUIT = KeyboardKey::KEY_SPACE;
-} // namespace Constants
+}  // namespace Constants
 
 #endif

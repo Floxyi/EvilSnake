@@ -1,27 +1,29 @@
 #ifndef FONT_MANAGER_H
 #define FONT_MANAGER_H
 
-#include "raylib.h"
 #include <unordered_map>
 
-class FontManager {
-public:
-  static FontManager &getInstance();
+#include "raylib.h"
 
-  void initFonts();
-  Font getFont(int fontId) const;
+class FontManager
+{
+   public:
+    static FontManager &getInstance();
 
-  static const int FONT_MAIN;
-  static const int FONT_TITLE;
+    void initFonts();
+    Font getFont(int fontId) const;
 
-private:
-  FontManager();
-  ~FontManager();
+    static const int FONT_MAIN;
+    static const int FONT_TITLE;
 
-  FontManager(const FontManager &) = delete;
-  FontManager &operator=(const FontManager &) = delete;
+   private:
+    FontManager();
+    ~FontManager();
 
-  std::unordered_map<int, Font> fonts;
+    FontManager(const FontManager &) = delete;
+    FontManager &operator=(const FontManager &) = delete;
+
+    std::unordered_map<int, Font> fonts;
 };
 
 #endif

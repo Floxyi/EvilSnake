@@ -6,32 +6,35 @@
 #include "Snake.h"
 #include "raylib.h"
 
-class Game {
-private:
-  GameState state;
-  GameMode mode;
-  Snake snake;
-  Vector2 foodPosition;
-  std::vector<Vector2> wallPositions;
-  int score;
-  float startTime;
-  float endTime;
-  float timeSinceLastMove;
-  float timeSinceLastEventCheck;
+class Game
+{
+   private:
+    GameState state;
+    GameMode mode;
+    Snake snake;
+    Vector2 foodPosition;
+    std::vector<Vector2> wallPositions;
+    int score;
+    float startTime;
+    float endTime;
+    float timeSinceLastMove;
+    float timeSinceLastEventCheck;
 
-  void update();
-  void reset();
-  void changeGameMode();
-  bool isGameFinished() const;
-  void handleInput();
-  void handleDirectionChange(Direction dir);
+    void update();
+    void reset();
+    void changeGameMode();
+    bool isGameFinished() const;
+    void handleInput();
+    void handleDirectionChange(Direction dir);
 
-  void draw();
-  void drawGrid(Color color);
+    void draw();
+    void drawGrid();
+    void drawGameObjects();
+    void drawUI();
 
-public:
-  Game();
-  void run();
+   public:
+    Game();
+    void run();
 };
 
 #endif

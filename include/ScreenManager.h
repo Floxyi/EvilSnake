@@ -3,22 +3,23 @@
 
 #include <string>
 
-class ScreenManager {
-public:
-  static ScreenManager &getInstance();
+class ScreenManager
+{
+   public:
+    static ScreenManager &getInstance();
 
-  void drawMenuScreen();
-  void drawPlayingScreen(int score, std::string gameMode, std::string time);
-  void drawPauseScreen(int score, std::string time);
-  void drawGameOverScreen(int score, std::string time);
-  void drawGameFinishedScreen(int score, std::string time);
+    void drawMenuScreen();
+    void drawPlayingScreen(int score, std::string gameMode, std::string time);
+    void drawPauseScreen(int score, std::string time);
+    void drawGameOverScreen(int score, std::string time);
+    void drawGameFinishedScreen(int score, std::string time);
 
-private:
-  ScreenManager();
-  ~ScreenManager();
+   private:
+    ScreenManager();
+    ~ScreenManager();
 
-  ScreenManager(const ScreenManager &) = delete;
-  ScreenManager &operator=(const ScreenManager &) = delete;
+    ScreenManager(const ScreenManager &) = delete;
+    ScreenManager &operator=(const ScreenManager &) = delete;
 };
 
 #endif
