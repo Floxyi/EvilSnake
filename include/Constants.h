@@ -4,12 +4,14 @@
 #include <raylib.h>
 namespace Constants
 {
-constexpr int CELL_AMOUNT_Y = 10;
-constexpr int CELL_AMOUNT_X = 15;
+constexpr int CELL_AMOUNT_Y = 15;
+constexpr int CELL_AMOUNT_X = 25;
 
 constexpr float WINDOW_HEIGHT = 600;
 constexpr float CELL_SIZE = WINDOW_HEIGHT / CELL_AMOUNT_Y;
 constexpr float WINDOW_WIDTH = CELL_SIZE * CELL_AMOUNT_X;
+
+constexpr int WINNING_SCORE = 100;
 
 constexpr float DEFAULT_SNAKE_SPEED = 0.15f;
 constexpr float FAST_SNAKE_SPEED = 0.1f;

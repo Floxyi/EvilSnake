@@ -38,11 +38,6 @@ void Game::reset()
     foodPosition = GameUtils::getRandomWallPosition(snake.body, foodPosition);
 }
 
-bool Game::isGameFinished() const
-{
-    return score >= Constants::CELL_AMOUNT_Y * Constants::WINDOW_WIDTH / Constants::CELL_SIZE;
-}
-
 void Game::handleInput()
 {
     if (IsKeyPressed(Constants::KEY_SCREENSHOT)) {
@@ -127,7 +122,7 @@ void Game::changeGameMode()
 
 void Game::update()
 {
-    if (isGameFinished()) {
+    if (score >= Constants::WINNING_SCORE) {
         state = GameState::FINISHED;
     }
 

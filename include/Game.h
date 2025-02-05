@@ -23,7 +23,6 @@ class Game
     void update();
     void reset();
     void changeGameMode();
-    bool isGameFinished() const;
     void handleInput();
     void handleDirectionChange(Direction dir);
 
