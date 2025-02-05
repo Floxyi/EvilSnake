@@ -1,11 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "GameMode.h"
+#include "GameState.h"
 #include "Snake.h"
 #include "raylib.h"
-
-enum class GameState { MENU, PLAYING, PAUSED, FINISHED, GAME_OVER };
-enum class GameMode { NORMAL, FAST, WALLS };
 
 class Game {
 private:
@@ -20,7 +19,6 @@ private:
   float timeSinceLastMove;
   float timeSinceLastEventCheck;
 
-  void init();
   void update();
   void reset();
   void changeGameMode();
@@ -30,18 +28,6 @@ private:
 
   void draw();
   void drawGrid(Color color);
-  void drawGameOverScreen();
-  void drawGameFinishedScreen();
-  void drawMenuScreen();
-  void drawPlayingScreen();
-  void drawPauseScreen();
-
-  void takeScreenshot() const;
-  Vector2 getRandomGridPosition() const;
-  Vector2 getRandomFoodPosition(Snake &snake) const;
-  Vector2 getRandomWallPosition(Snake &snake) const;
-  std::string getFormattedGameTime(float until) const;
-  std::string getFormattedGameMode() const;
 
 public:
   Game();

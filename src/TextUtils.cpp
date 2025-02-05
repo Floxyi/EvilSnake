@@ -32,13 +32,10 @@ float computeVerticalPosition(VerticalAlignment alignment, float fontSize,
   }
 }
 
-} // namespace
-
-Vector2
-TextUtils::computeAlignedPosition(const char *text, Font font, float fontSize,
-                                  HorizontalAlignment horizontalAlignment,
-                                  VerticalAlignment verticalAlignment,
-                                  float padding) {
+Vector2 computeAlignedPosition(const char *text, Font font, float fontSize,
+                               HorizontalAlignment horizontalAlignment,
+                               VerticalAlignment verticalAlignment,
+                               float padding) {
   Vector2 position = {0, 0};
 
   float textWidth = MeasureTextEx(font, text, fontSize, 2).x;
@@ -49,6 +46,8 @@ TextUtils::computeAlignedPosition(const char *text, Font font, float fontSize,
 
   return position;
 }
+
+} // namespace
 
 void TextUtils::drawAlignedText(const char *text, int fontId, float fontSize,
                                 Color color,

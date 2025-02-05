@@ -3,16 +3,17 @@
 
 #include <raylib.h>
 namespace Constants {
-constexpr float WINDOW_HEIGHT = 600;
+constexpr int CELL_AMOUNT_Y = 10;
+constexpr int CELL_AMOUNT_X = 15;
 
-constexpr int GRID_Y_AMOUNT = 10;
-constexpr float GRID_SIZE = WINDOW_HEIGHT / GRID_Y_AMOUNT;
-constexpr float WINDOW_WIDTH = GRID_SIZE * 15;
+constexpr float WINDOW_HEIGHT = 600;
+constexpr float CELL_SIZE = WINDOW_HEIGHT / CELL_AMOUNT_Y;
+constexpr float WINDOW_WIDTH = CELL_SIZE * CELL_AMOUNT_X;
 
 constexpr float DEFAULT_SNAKE_SPEED = 0.15f;
 constexpr float FAST_SNAKE_SPEED = 0.1f;
 
-constexpr float EVENT_PROBABILITY = 10.0f;
+constexpr float EVENT_INTERVAL = 10.0f;
 constexpr int WALL_AMOUNT = 10;
 
 constexpr KeyboardKey KEY_PAUSE = KeyboardKey::KEY_J;

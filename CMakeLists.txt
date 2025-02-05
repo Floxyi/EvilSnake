@@ -9,8 +9,10 @@ set(SOURCES
     src/Game.cpp
     src/Snake.cpp
     src/TextUtils.cpp
+    src/GameUtils.cpp
     src/SoundManager.cpp
     src/FontManager.cpp
+    src/ScreenManager.cpp
 )
 
 include_directories(src)

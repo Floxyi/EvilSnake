@@ -22,16 +22,16 @@ bool Snake::moveAndCheckForFood(const Vector2 &foodPosition) {
 
   switch (direction) {
   case Direction::UP:
-    head.y -= Constants::GRID_SIZE;
+    head.y -= Constants::CELL_SIZE;
     break;
   case Direction::DOWN:
-    head.y += Constants::GRID_SIZE;
+    head.y += Constants::CELL_SIZE;
     break;
   case Direction::LEFT:
-    head.x -= Constants::GRID_SIZE;
+    head.x -= Constants::CELL_SIZE;
     break;
   case Direction::RIGHT:
-    head.x += Constants::GRID_SIZE;
+    head.x += Constants::CELL_SIZE;
     break;
   default:
     break;
@@ -66,8 +66,8 @@ bool Snake::hasCollided(const std::vector<Vector2> &wallPositions) const {
 
 void Snake::draw() const {
   for (const Vector2 &bodyPart : body) {
-    DrawRectangle(bodyPart.x, bodyPart.y, Constants::GRID_SIZE,
-                  Constants::GRID_SIZE, DARKGREEN);
+    DrawRectangle(bodyPart.x, bodyPart.y, Constants::CELL_SIZE,
+                  Constants::CELL_SIZE, DARKGREEN);
   }
 }
 
@@ -75,13 +75,4 @@ void Snake::resetToPosition(const Vector2 &position) {
   body.clear();
   body.push_back(position);
   direction = Direction::RIGHT;
-}
-
-bool Snake::isOnSnake(const Vector2 &position) const {
-  for (const Vector2 &bodyPart : body) {
-    if (bodyPart.x == position.x && bodyPart.y == position.y) {
-      return true;
-    }
-  }
-  return false;
 }
