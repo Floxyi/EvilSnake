@@ -1,10 +1,10 @@
-#include "../include/Game.h"
+#include "../include/game.h"
 
-#include "../include/Constants.h"
-#include "../include/FontManager.h"
-#include "../include/GameUtils.h"
-#include "../include/ScreenManager.h"
-#include "../include/SoundManager.h"
+#include "../include/constants.h"
+#include "../include/font_manager.h"
+#include "../include/game_utils.h"
+#include "../include/screen_manager.h"
+#include "../include/sound_manager.h"
 #include "raylib.h"
 
 Game::Game()
@@ -31,11 +31,11 @@ void Game::reset()
     endTime = 0.0f;
     state = GameState::MENU;
     mode = GameMode::NORMAL;
-    wallPositions = {};
+    wallPositions.clear();
 
     snake.speed = Constants::DEFAULT_SNAKE_SPEED;
     snake.resetToPosition(GameUtils::getRandomGridPosition());
-    foodPosition = GameUtils::getRandomWallPosition(snake.body, foodPosition);
+    foodPosition = GameUtils::getRandomFoodPosition(snake.body, wallPositions);
 }
 
 void Game::handleInput()
@@ -66,17 +66,21 @@ void Game::handleInput()
     }
 
     if (state == GameState::PLAYING || state == GameState::MENU) {
-        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) {
-            handleDirectionChange(Direction::UP);
-        }
-        if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) {
-            handleDirectionChange(Direction::DOWN);
-        }
-        if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)) {
-            handleDirectionChange(Direction::LEFT);
-        }
-        if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)) {
-            handleDirectionChange(Direction::RIGHT);
+        std::unordered_map<int, Direction> keyMap = {
+            {KEY_UP, Direction::UP},
+            {KEY_W, Direction::UP},
+            {KEY_DOWN, Direction::DOWN},
+            {KEY_S, Direction::DOWN},
+            {KEY_LEFT, Direction::LEFT},
+            {KEY_A, Direction::LEFT},
+            {KEY_RIGHT, Direction::RIGHT},
+            {KEY_D, Direction::RIGHT},
+        };
+
+        for (const auto &[key, dir] : keyMap) {
+            if (IsKeyPressed(key)) {
+                handleDirectionChange(dir);
+            }
         }
     }
 }
@@ -93,31 +97,22 @@ void Game::handleDirectionChange(Direction dir)
 
 void Game::changeGameMode()
 {
-    int random = GetRandomValue(0, 2);
+    static const std::vector<GameMode> gameModes = {GameMode::NORMAL, GameMode::FAST, GameMode::WALLS};
+    GameMode newMode = gameModes[GetRandomValue(0, gameModes.size() - 1)];
 
-    if (random == 0 && mode != GameMode::NORMAL) {
-        mode = GameMode::NORMAL;
-        snake.speed = Constants::DEFAULT_SNAKE_SPEED;
-        wallPositions = {};
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-    }
+    if (mode == newMode) return;
 
-    if (random == 1 && mode != GameMode::FAST) {
-        mode = GameMode::FAST;
-        snake.speed = Constants::FAST_SNAKE_SPEED;
-        wallPositions = {};
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
-    }
+    mode = newMode;
+    snake.speed = (mode == GameMode::FAST) ? Constants::FAST_SNAKE_SPEED : Constants::DEFAULT_SNAKE_SPEED;
+    wallPositions.clear();
 
-    if (random == 2 && mode != GameMode::WALLS) {
-        mode = GameMode::WALLS;
-        snake.speed = Constants::DEFAULT_SNAKE_SPEED;
-        wallPositions = {};
+    if (mode == GameMode::WALLS) {
         for (int i = 0; i < Constants::WALL_AMOUNT; i++) {
             wallPositions.push_back(GameUtils::getRandomGridPosition());
         }
-        SoundManager::getInstance().play(SoundManager::SOUND_START);
     }
+
+    SoundManager::getInstance().play(SoundManager::SOUND_START);
 }
 
 void Game::update()
@@ -192,8 +187,7 @@ void Game::drawUI()
             ScreenManager::getInstance().drawGameOverScreen(score, GameUtils::getFormattedGameTime(startTime, endTime));
             break;
         case GameState::FINISHED:
-            ScreenManager::getInstance().drawGameFinishedScreen(
-                score, GameUtils::getFormattedGameTime(startTime, endTime));
+            ScreenManager::getInstance().drawFinishedScreen(score, GameUtils::getFormattedGameTime(startTime, endTime));
             break;
     }
 }

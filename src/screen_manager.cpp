@@ -1,7 +1,7 @@
-#include "../include/ScreenManager.h"
+#include "../include/screen_manager.h"
 
-#include "../include/FontManager.h"
-#include "../include/TextUtils.h"
+#include "../include/font_manager.h"
+#include "../include/text_utils.h"
 
 ScreenManager::ScreenManager() {}
 
@@ -75,7 +75,7 @@ void ScreenManager::drawGameOverScreen(int score, std::string time)
         VerticalAlignment::CENTER, HorizontalAlignment::CENTER, 50);
 }
 
-void ScreenManager::drawGameFinishedScreen(int score, std::string time)
+void ScreenManager::drawFinishedScreen(int score, std::string time)
 {
     TextUtils::drawAlignedText("YOU WON, CONGRATULATIONS!", FontManager::FONT_MAIN, 60, DARKGRAY,
         VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -120);

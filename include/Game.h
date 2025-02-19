@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "GameMode.h"
-#include "GameState.h"
-#include "Snake.h"
+#include "game_mode.h"
+#include "game_state.h"
 #include "raylib.h"
+#include "snake.h"
 
 class Game
 {

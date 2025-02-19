@@ -1,7 +1,7 @@
-#include "../include/TextUtils.h"
+#include "../include/text_utils.h"
 
-#include "../include/Constants.h"
-#include "../include/FontManager.h"
+#include "../include/constants.h"
+#include "../include/font_manager.h"
 
 namespace
 {
@@ -34,25 +34,18 @@ float computeVerticalPosition(VerticalAlignment alignment, float fontSize, float
     }
 }
 
-Vector2 computeAlignedPosition(const char *text, Font font, float fontSize, HorizontalAlignment horizontalAlignment,
-    VerticalAlignment verticalAlignment, float padding)
-{
-    Vector2 position = {0, 0};
-
-    float textWidth = MeasureTextEx(font, text, fontSize, 2).x;
-
-    position.x = computeHorizontalPosition(horizontalAlignment, textWidth, padding);
-    position.y = computeVerticalPosition(verticalAlignment, fontSize, padding);
-
-    return position;
-}
-
 }  // namespace
 
 void TextUtils::drawAlignedText(const char *text, int fontId, float fontSize, Color color,
     VerticalAlignment verticalAlignment, HorizontalAlignment horizontalAlignment, float padding)
 {
     Font font = FontManager::getInstance().getFont(fontId);
-    Vector2 position = computeAlignedPosition(text, font, fontSize, horizontalAlignment, verticalAlignment, padding);
+    Vector2 textSize = MeasureTextEx(font, text, fontSize, 2);
+
+    Vector2 position = {
+        computeHorizontalPosition(horizontalAlignment, textSize.x, padding),
+        computeVerticalPosition(verticalAlignment, textSize.y, padding),
+    };
+
     DrawTextEx(font, text, position, fontSize, 2, color);
 }

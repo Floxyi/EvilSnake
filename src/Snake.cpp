@@ -1,6 +1,6 @@
-#include "../include/Snake.h"
+#include "../include/snake.h"
 
-#include "../include/Constants.h"
+#include "../include/constants.h"
 #include "raylib.h"
 
 Snake::Snake(const Vector2 &position)
@@ -45,40 +45,38 @@ bool Snake::moveAndCheckForFood(const Vector2 &foodPosition)
     head.y = (int) (head.y + GetScreenHeight()) % GetScreenHeight();
     body.insert(body.begin(), head);
 
-    if (head.x == foodPosition.x && head.y == foodPosition.y) {
-        return true;
-    } else {
+    bool ateFood = (head.x == foodPosition.x && head.y == foodPosition.y);
+    if (!ateFood) {
         body.pop_back();
-        return false;
     }
+    return ateFood;
 }
 
 bool Snake::hasCollided(const std::vector<Vector2> &wallPositions) const
 {
-    const Vector2 &head = body.front();
-    for (size_t i = 3; i < body.size(); ++i) {
-        if (body[i].x == head.x && body[i].y == head.y) {
+    for (size_t i = 1; i < body.size(); ++i) {
+        if (body[i].x == body.front().x && body[i].y == body.front().y) {
             return true;
         }
     }
-    for (const Vector2 &wallPosition : wallPositions) {
-        if (head.x == wallPosition.x && head.y == wallPosition.y) {
-            return true;
-        }
+
+    if (std::any_of(wallPositions.begin(), wallPositions.end(),
+            [&](const Vector2 &wall) { return wall.x == body.front().x && wall.y == body.front().y; })) {
+        return true;
     }
+
     return false;
 }
 
 void Snake::draw() const
 {
-    for (const Vector2 &bodyPart : body) {
-        DrawRectangle(bodyPart.x, bodyPart.y, Constants::CELL_SIZE, Constants::CELL_SIZE, DARKGREEN);
+    for (size_t i = 0; i < body.size(); ++i) {
+        DrawRectangle(body[i].x, body[i].y, Constants::CELL_SIZE, Constants::CELL_SIZE, i == 0 ? GREEN : DARKGREEN);
     }
 }
 
 void Snake::resetToPosition(const Vector2 &position)
 {
-    body.clear();
-    body.push_back(position);
+    body.assign(1, position);
     direction = Direction::RIGHT;
 }

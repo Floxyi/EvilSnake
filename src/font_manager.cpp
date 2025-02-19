@@ -1,4 +1,4 @@
-#include "../include/FontManager.h"
+#include "../include/font_manager.h"
 
 const int FontManager::FONT_MAIN = 1;
 const int FontManager::FONT_TITLE = 2;

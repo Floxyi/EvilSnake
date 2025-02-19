@@ -7,13 +7,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCES
     src/main.cpp
-    src/Game.cpp
-    src/Snake.cpp
-    src/TextUtils.cpp
-    src/GameUtils.cpp
-    src/SoundManager.cpp
-    src/FontManager.cpp
-    src/ScreenManager.cpp
+    src/game.cpp
+    src/snake.cpp
+    src/text_utils.cpp
+    src/game_utils.cpp
+    src/sound_manager.cpp
+    src/font_manager.cpp
+    src/screen_manager.cpp
 )
 
 include_directories(src)

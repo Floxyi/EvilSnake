@@ -1,4 +1,4 @@
-#include "../include/SoundManager.h"
+#include "../include/sound_manager.h"
 
 const int SoundManager::SOUND_EAT = 1;
 const int SoundManager::SOUND_EXPLOSION = 2;

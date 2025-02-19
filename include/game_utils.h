@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "GameMode.h"
+#include "game_mode.h"
 #include "raylib.h"
 
 namespace GameUtils

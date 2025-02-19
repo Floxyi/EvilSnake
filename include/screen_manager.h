@@ -12,7 +12,7 @@ class ScreenManager
     void drawPlayingScreen(int score, std::string gameMode, std::string time);
     void drawPauseScreen(int score, std::string time);
     void drawGameOverScreen(int score, std::string time);
-    void drawGameFinishedScreen(int score, std::string time);
+    void drawFinishedScreen(int score, std::string time);
 
    private:
     ScreenManager();

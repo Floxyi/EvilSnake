@@ -1,24 +1,21 @@
-#include "../include/GameUtils.h"
+#include "../include/game_utils.h"
 
 #include <raylib.h>
 
 #include <ctime>
-#include <sstream>
+#include <format>
 
-#include "../include/Constants.h"
-#include "../include/GameMode.h"
+#include "../include/constants.h"
+#include "../include/game_mode.h"
 
 namespace
 {
 
 bool isPositionOnSnake(Vector2 position, const std::vector<Vector2> &snakePosition)
 {
-    for (const Vector2 &bodyPart : snakePosition) {
-        if (bodyPart.x == position.x && bodyPart.y == position.y) {
-            return true;
-        }
-    }
-    return false;
+    return std::find_if(snakePosition.begin(), snakePosition.end(), [&](const Vector2 &bodyPart) {
+        return bodyPart.x == position.x && bodyPart.y == position.y;
+    }) != snakePosition.end();
 }
 
 }  // namespace
@@ -26,6 +23,10 @@ bool isPositionOnSnake(Vector2 position, const std::vector<Vector2> &snakePositi
 void GameUtils::applyApplicationIcon()
 {
     Image icon = LoadImage("assets/textures/EvilSnake.png");
+    if (icon.width == 0 || icon.height == 0) {
+        TraceLog(LOG_WARNING, "Failed to load application icon.");
+        return;
+    }
     SetWindowIcon(icon);
     UnloadImage(icon);
 }
@@ -43,16 +44,11 @@ void GameUtils::takeScreenshot()
 std::string GameUtils::getFormattedGameTime(float startTime, float until)
 {
     float elapsedTime = until - startTime;
-
     int minutes = static_cast<int>(elapsedTime) / 60;
     int seconds = static_cast<int>(elapsedTime) % 60;
     int milliseconds = static_cast<int>((elapsedTime - static_cast<int>(elapsedTime)) * 100);
 
-    std::ostringstream timeStream;
-    timeStream << (minutes < 10 ? "0" : "") << minutes << ":" << (seconds < 10 ? "0" : "") << seconds << ":"
-               << (milliseconds < 10 ? "0" : "") << milliseconds;
-
-    return timeStream.str();
+    return std::format("{:02}:{:02}:{:02}", minutes, seconds, milliseconds);
 }
 
 std::string GameUtils::getFormattedGameMode(GameMode mode)
@@ -64,8 +60,9 @@ std::string GameUtils::getFormattedGameMode(GameMode mode)
             return "Fast";
         case GameMode::WALLS:
             return "Walls";
+        default:
+            return "";
     }
-    return "";
 }
 
 Vector2 GameUtils::getRandomGridPosition()
@@ -79,14 +76,13 @@ Vector2 GameUtils::getRandomFoodPosition(
     const std::vector<Vector2> &snakePosition, const std::vector<Vector2> &wallPositions)
 {
     Vector2 position;
-    bool onWall = false;
-    bool onSnake = false;
+    bool onSnake, onWall;
 
     do {
         position = getRandomGridPosition();
+        onSnake = isPositionOnSnake(position, snakePosition);
         onWall = std::any_of(wallPositions.begin(), wallPositions.end(),
             [&](const Vector2 &wall) { return position.x == wall.x && position.y == wall.y; });
-        onSnake = isPositionOnSnake(position, snakePosition);
     } while (onSnake || onWall);
 
     return position;
@@ -95,14 +91,9 @@ Vector2 GameUtils::getRandomFoodPosition(
 Vector2 GameUtils::getRandomWallPosition(const std::vector<Vector2> &snakePosition, const Vector2 &foodPosition)
 {
     Vector2 position;
-    bool onFood = false;
-    bool onSnake = false;
-
     do {
         position = getRandomGridPosition();
-        onFood = (position.x == foodPosition.x && position.y == foodPosition.y);
-        onSnake = isPositionOnSnake(position, snakePosition);
-    } while (onSnake || onFood);
-
+    } while (
+        isPositionOnSnake(position, snakePosition) || (position.x == foodPosition.x && position.y == foodPosition.y));
     return position;
 }
