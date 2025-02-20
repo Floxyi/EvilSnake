@@ -8,7 +8,7 @@
 
 ![EvilSnake Screenshot](/assets/textures/Screenshot.png)
 
-**EvilSnake** is a simple, snake-inspired game built with C++ and [Raylib](https://www.raylib.com/).
+**EvilSnake** is a simple, snake-inspired game built with C++ and [Raylib](https://www.raylib.com/). Reach 100 points, be aware of the two difficulty modes and compare your best time with your friends!
 
 ## Prerequisites
 
@@ -60,4 +60,8 @@ make clean
 
 ## Acknowledgments
 
-The **Makefile** and **CMakeLists.txt** files were created with assistance from ChatGPT. Additionally, certain parts of the game logic were optimized with ChatGPT’s guidance, leveraging integrated C++ methods such as **std::any_of**, **std::find_if**, and **std::strftime** for improved performance and efficiency.
+The **Makefile** and **CMakeLists.txt** files were created with assistance from ChatGPT. Additionally, a few small parts of the game logic were optimized afterwards with ChatGPT’s guidance for improved performance and efficiency.
+
+This project uses the **Thaleah Font** by Rick Hoppmann [Download here](https://tinyworlds.itch.io/free-pixel-font-thaleah) (no modifications made)
+
+This project uses the **Round** by Herald [Download here](https://heraldod.itch.io/bitmap-fonts) (no modifications made)
