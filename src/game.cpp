@@ -1,3 +1,12 @@
+/**
+ * @file game.cpp
+ * @brief Implementation of the Game class for the Evil Snake game
+ *
+ * This file contains the implementation of the main game loop, game state management,
+ * input handling, and rendering logic for the Evil Snake game. The game features
+ * multiple modes (normal, fast, and walls) and states (menu, playing, paused, etc.).
+ */
+
 #include "../include/game.h"
 
 #include "../include/constants.h"
@@ -7,6 +16,12 @@
 #include "../include/sound_manager.h"
 #include "raylib.h"
 
+/**
+ * @brief Constructor for the Game class
+ *
+ * Initializes the game window, loads resources, and sets up initial game state.
+ * The snake is placed at a random position and the first food item is spawned.
+ */
 Game::Game()
     : state(GameState::MENU),
       mode(GameMode::NORMAL),
@@ -24,6 +39,15 @@ Game::Game()
     SoundManager::getInstance().initSounds();
 }
 
+/**
+ * @brief Resets the game to its initial state
+ *
+ * Clears all game progress and returns to the menu state. This includes:
+ * - Resetting score and timing information
+ * - Clearing wall positions
+ * - Resetting snake position and speed
+ * - Generating new food position
+ */
 void Game::reset()
 {
     score = 0;
@@ -38,6 +62,15 @@ void Game::reset()
     foodPosition = GameUtils::getRandomFoodPosition(snake.body, wallPositions);
 }
 
+/**
+ * @brief Handles all input events for the game
+ *
+ * Processes keyboard input based on the current game state, including:
+ * - Screenshot functionality (available in all states)
+ * - Game navigation (quit, pause, resume)
+ * - Snake movement controls (WASD and arrow keys)
+ * - Menu navigation
+ */
 void Game::handleInput()
 {
     if (IsKeyPressed(Constants::KEY_SCREENSHOT)) {
@@ -84,6 +117,14 @@ void Game::handleInput()
     }
 }
 
+/**
+ * @brief Handles direction changes for the snake
+ *
+ * @param dir The new direction to set for the snake
+ *
+ * If called from the menu state, this also starts the game.
+ * Otherwise, it updates the snake's direction during gameplay.
+ */
 void Game::handleDirectionChange(Direction dir)
 {
     if (state == GameState::MENU) {
@@ -94,6 +135,16 @@ void Game::handleDirectionChange(Direction dir)
     snake.setDirection(dir);
 }
 
+/**
+ * @brief Changes the current game mode randomly
+ *
+ * Switches between three possible modes:
+ * - NORMAL: Default snake speed, no walls
+ * - FAST: Increased snake speed, no walls
+ * - WALLS: Default speed with randomly placed wall obstacles
+ *
+ * The mode change is accompanied by a sound effect and appropriate game modifications.
+ */
 void Game::changeGameMode()
 {
     static const std::vector<GameMode> gameModes = {GameMode::NORMAL, GameMode::FAST, GameMode::WALLS};
@@ -114,6 +165,16 @@ void Game::changeGameMode()
     SoundManager::getInstance().play(SoundManager::SOUND_START);
 }
 
+/**
+ * @brief Updates the game state
+ *
+ * Handles game logic including:
+ * - Checking for win condition
+ * - Moving the snake
+ * - Detecting collisions
+ * - Managing food collection
+ * - Triggering game mode changes
+ */
 void Game::update()
 {
     if (score >= Constants::WINNING_SCORE) {
@@ -149,6 +210,12 @@ void Game::update()
     }
 }
 
+/**
+ * @brief Draws the game grid
+ *
+ * Renders the background grid that serves as the game board.
+ * The grid is drawn using light gray lines on a white background.
+ */
 void Game::drawGrid()
 {
     ClearBackground(RAYWHITE);
@@ -160,6 +227,14 @@ void Game::drawGrid()
     }
 }
 
+/**
+ * @brief Draws all game objects
+ *
+ * Renders the main game elements:
+ * - Food (red square)
+ * - Snake (handled by Snake class)
+ * - Walls (black squares, only in WALLS mode)
+ */
 void Game::drawGameObjects()
 {
     DrawRectangle(foodPosition.x, foodPosition.y, Constants::CELL_SIZE, Constants::CELL_SIZE, RED);
@@ -169,6 +244,16 @@ void Game::drawGameObjects()
     }
 }
 
+/**
+ * @brief Draws the user interface
+ *
+ * Renders the appropriate UI elements based on the current game state:
+ * - Menu screen
+ * - Playing screen (score, mode, time)
+ * - Pause screen
+ * - Game over screen
+ * - Victory screen
+ */
 void Game::drawUI()
 {
     switch (state) {
@@ -191,6 +276,16 @@ void Game::drawUI()
     }
 }
 
+/**
+ * @brief Performs the complete draw cycle
+ *
+ * Handles all rendering operations in the correct order:
+ * 1. Begin the drawing context
+ * 2. Draw the background grid
+ * 3. Draw game objects
+ * 4. Draw UI elements
+ * 5. End the drawing context
+ */
 void Game::draw()
 {
     BeginDrawing();
@@ -200,6 +295,16 @@ void Game::draw()
     EndDrawing();
 }
 
+/**
+ * @brief Main game loop
+ *
+ * Runs the game until the window is closed:
+ * 1. Process input
+ * 2. Update game state
+ * 3. Render frame
+ *
+ * Properly closes the window when the game ends.
+ */
 void Game::run()
 {
     while (!WindowShouldClose()) {
