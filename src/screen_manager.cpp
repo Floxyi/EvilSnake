@@ -1,7 +1,6 @@
 #include "../include/screen_manager.h"
 
 #include "../include/font_manager.h"
-#include "../include/game_utils.h"
 #include "../include/text_utils.h"
 
 ScreenManager::ScreenManager() {}
@@ -16,22 +15,18 @@ ScreenManager &ScreenManager::getInstance()
 
 void ScreenManager::drawMenuScreen()
 {
-    TextUtils::drawAlignedText(GameUtils::getAssetPath().c_str(), FontManager::FONT_TITLE, 10, DARKGRAY,
-        VerticalAlignment::TOP, HorizontalAlignment::CENTER, 60);
-    TextUtils::drawAlignedText("Press the [ARROW KEYS / WASD] key to start and play the game", FontManager::FONT_MAIN,
-        25, DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::CENTER, 180);
+    TextUtils::drawAlignedText(
+        "EVILSNAKE", FontManager::FONT_TITLE, 80, DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::CENTER, 60);
+    TextUtils::drawAlignedText("Press the [ARROW KEYS / WASD] to start and play the game", FontManager::FONT_MAIN, 25,
+        DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::CENTER, 180);
     TextUtils::drawAlignedText("You have to reach a score of 100", FontManager::FONT_MAIN, 20, DARKGRAY,
         VerticalAlignment::TOP, HorizontalAlignment::CENTER, 220);
     TextUtils::drawAlignedText("Made by Florian", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
         HorizontalAlignment::LEFT, 10);
     TextUtils::drawAlignedText("[ESC] - Quit", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
         HorizontalAlignment::CENTER, 10);
-    TextUtils::drawAlignedText("[J/K] - Pause/Continue", FontManager::FONT_MAIN, 20, DARKGRAY,
+    TextUtils::drawAlignedText("[L] - Screenshot / [O] Open Screenshots", FontManager::FONT_MAIN, 20, DARKGRAY,
         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 30);
-    TextUtils::drawAlignedText("[Space] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
-        VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 50);
-    TextUtils::drawAlignedText("[L] - Screenshot / [O] Open Screenshot Folder", FontManager::FONT_MAIN, 20, DARKGRAY,
-        VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 70);
     TextUtils::drawAlignedText(
         "v1.0.0", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM, HorizontalAlignment::RIGHT, 10);
 }
@@ -60,7 +55,7 @@ void ScreenManager::drawPauseScreen(int score, std::string time)
         VerticalAlignment::CENTER, HorizontalAlignment::CENTER, -70);
     TextUtils::drawAlignedText("[SPACE] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 10);
-    TextUtils::drawAlignedText("[K] - Continue", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
+    TextUtils::drawAlignedText("[J] - Continue", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
         HorizontalAlignment::CENTER, 30);
 }
 

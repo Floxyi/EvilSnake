@@ -51,17 +51,10 @@ void Game::handleInput()
         }
     }
 
-    if (state == GameState::PLAYING) {
+    if (state == GameState::PLAYING || state == GameState::PAUSED) {
         if (IsKeyPressed(Constants::KEY_PAUSE)) {
             endTime = GetTime();
-            state = GameState::PAUSED;
-        }
-    }
-
-    if (state == GameState::PAUSED) {
-        if (IsKeyPressed(Constants::KEY_CONTINUE)) {
-            endTime = 0.0f;
-            state = GameState::PLAYING;
+            state = state == GameState::PLAYING ? GameState::PAUSED : GameState::PLAYING;
         }
     }
 
