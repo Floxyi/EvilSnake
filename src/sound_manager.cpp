@@ -26,9 +26,9 @@ SoundManager &SoundManager::getInstance()
 
 void SoundManager::initSounds()
 {
-    sounds[SOUND_EAT] = LoadSound(TextFormat("%ssounds/eat.wav", GameUtils::assetPath().c_str()));
-    sounds[SOUND_EXPLOSION] = LoadSound(TextFormat("%ssounds/explosion.wav", GameUtils::assetPath().c_str()));
-    sounds[SOUND_START] = LoadSound(TextFormat("%ssounds/start.wav", GameUtils::assetPath().c_str()));
+    sounds[SOUND_EAT] = LoadSound(TextFormat("%ssounds/eat.wav", GameUtils::getAssetPath().c_str()));
+    sounds[SOUND_EXPLOSION] = LoadSound(TextFormat("%ssounds/explosion.wav", GameUtils::getAssetPath().c_str()));
+    sounds[SOUND_START] = LoadSound(TextFormat("%ssounds/start.wav", GameUtils::getAssetPath().c_str()));
 }
 
 void SoundManager::play(int soundId)

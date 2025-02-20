@@ -33,19 +33,26 @@ cd EvilSnake
 
 ### Run & Build the Project
 
-You can compile and run the game:
+- You can compile and run the game:
 
 ```bash
 make run
 ```
 
-You can build the game for macOS:
+- You can build the game for macOS:
 
 ```bash
 make build-macos
 ```
 
-If you need to clean the build directories:
+- (Optional) You can export compiler commands for use with LSPs:
+
+```bash
+cd build/
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+```
+
+- If you need to clean the build directories:
 
 ```bash
 make clean

@@ -3,7 +3,9 @@
 #include <raylib.h>
 
 #include <ctime>
+#include <filesystem>
 #include <format>
+#include <iostream>
 
 #include "../include/constants.h"
 #include "../include/game_mode.h"
@@ -16,6 +18,27 @@ bool isPositionOnSnake(Vector2 position, const std::vector<Vector2> &snakePositi
     return std::find_if(snakePosition.begin(), snakePosition.end(), [&](const Vector2 &bodyPart) {
         return bodyPart.x == position.x && bodyPart.y == position.y;
     }) != snakePosition.end();
+}
+
+std::string getResourcesPath()
+{
+    const char *workingDir = GetApplicationDirectory();
+    std::string fullPath = std::string(workingDir);
+
+    size_t pos = fullPath.find_last_of("/");
+    if (pos != std::string::npos) {
+        pos = fullPath.find_last_of("/", pos - 1);
+    }
+
+    if (pos != std::string::npos) {
+        fullPath = fullPath.substr(0, pos);
+    }
+
+#ifdef MACOS_BUILD
+    fullPath += "/Resources";
+#endif
+
+    return fullPath;
 }
 
 }  // namespace
@@ -31,6 +54,11 @@ void GameUtils::applyApplicationIcon()
     UnloadImage(icon);
 }
 
+#include <ctime>
+#include <filesystem>
+#include <iostream>
+#include <string>
+
 void GameUtils::takeScreenshot()
 {
     std::time_t now = std::time(nullptr);
@@ -38,7 +66,32 @@ void GameUtils::takeScreenshot()
     char timeBuffer[32];
     std::strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d_%H-%M-%S", localTime);
     std::string filename = "Screenshot_" + std::string(timeBuffer) + ".png";
+
     TakeScreenshot(filename.c_str());
+
+    std::string picturesDir = "/Users/" + std::string(getenv("USER")) + "/Pictures/EvilSnake/";
+
+    try {
+        if (!std::filesystem::exists(picturesDir)) {
+            std::filesystem::create_directories(picturesDir);
+        }
+        std::string finalPath = picturesDir + filename;
+        std::filesystem::rename(filename, finalPath);
+    } catch (const std::filesystem::filesystem_error &e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+        std::cerr << "Error code: " << e.code() << std::endl;
+    }
+}
+
+void GameUtils::openScreenshotsFolder()
+{
+    std::string screenshotsPath = "/Users/" + std::string(getenv("USER")) + "/Pictures/EvilSnake/";
+
+    if (!std::filesystem::exists(screenshotsPath)) {
+        std::filesystem::create_directory(screenshotsPath);
+    }
+
+    OpenURL(screenshotsPath.c_str());
 }
 
 std::string GameUtils::getFormattedGameTime(float startTime, float until)
@@ -97,24 +150,8 @@ Vector2 GameUtils::getRandomWallPosition(const std::vector<Vector2> &snakePositi
     return position;
 }
 
-std::string GameUtils::assetPath()
+std::string GameUtils::getAssetPath()
 {
-    const char *workingDir = GetApplicationDirectory();
-    std::string fullPath = std::string(workingDir);
-
-    size_t pos = fullPath.find_last_of("/");
-    if (pos != std::string::npos) {
-        pos = fullPath.find_last_of("/", pos - 1);
-    }
-
-    if (pos != std::string::npos) {
-        fullPath = fullPath.substr(0, pos);
-    }
-
-#ifdef MACOS_BUILD
-    fullPath += "/Resources";
-#endif
-
-    fullPath += "/assets/";
-    return fullPath;
+    std::string resourcePath = getResourcesPath() + "/assets/";
+    return resourcePath;
 }

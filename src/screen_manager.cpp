@@ -1,6 +1,7 @@
 #include "../include/screen_manager.h"
 
 #include "../include/font_manager.h"
+#include "../include/game_utils.h"
 #include "../include/text_utils.h"
 
 ScreenManager::ScreenManager() {}
@@ -15,8 +16,8 @@ ScreenManager &ScreenManager::getInstance()
 
 void ScreenManager::drawMenuScreen()
 {
-    TextUtils::drawAlignedText(
-        "EvilSnake", FontManager::FONT_TITLE, 80, DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::CENTER, 60);
+    TextUtils::drawAlignedText(GameUtils::getAssetPath().c_str(), FontManager::FONT_TITLE, 10, DARKGRAY,
+        VerticalAlignment::TOP, HorizontalAlignment::CENTER, 60);
     TextUtils::drawAlignedText("Press the [ARROW KEYS / WASD] key to start and play the game", FontManager::FONT_MAIN,
         25, DARKGRAY, VerticalAlignment::TOP, HorizontalAlignment::CENTER, 180);
     TextUtils::drawAlignedText("You have to reach a score of 100", FontManager::FONT_MAIN, 20, DARKGRAY,
@@ -29,8 +30,8 @@ void ScreenManager::drawMenuScreen()
         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 30);
     TextUtils::drawAlignedText("[Space] - Quit to main menu", FontManager::FONT_MAIN, 20, DARKGRAY,
         VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 50);
-    TextUtils::drawAlignedText("[L] - Screenshot", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
-        HorizontalAlignment::CENTER, 70);
+    TextUtils::drawAlignedText("[L] - Screenshot / [O] Open Screenshot Folder", FontManager::FONT_MAIN, 20, DARKGRAY,
+        VerticalAlignment::BOTTOM, HorizontalAlignment::CENTER, 70);
     TextUtils::drawAlignedText(
         "v1.0.0", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM, HorizontalAlignment::RIGHT, 10);
 }

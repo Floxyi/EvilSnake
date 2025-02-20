@@ -24,8 +24,8 @@ FontManager &FontManager::getInstance()
 
 void FontManager::initFonts()
 {
-    fonts[FONT_MAIN] = LoadFontEx(TextFormat("%sfonts/Thaleah.ttf", GameUtils::assetPath().c_str()), 256, 0, 250);
-    fonts[FONT_TITLE] = LoadFontEx(TextFormat("%sfonts/Round.ttf", GameUtils::assetPath().c_str()), 256, 0, 250);
+    fonts[FONT_MAIN] = LoadFontEx(TextFormat("%sfonts/Thaleah.ttf", GameUtils::getAssetPath().c_str()), 256, 0, 250);
+    fonts[FONT_TITLE] = LoadFontEx(TextFormat("%sfonts/Round.ttf", GameUtils::getAssetPath().c_str()), 256, 0, 250);
 }
 
 Font FontManager::getFont(int fontId) const

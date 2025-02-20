@@ -65,6 +65,12 @@ void Game::handleInput()
         }
     }
 
+    if (state == GameState::MENU) {
+        if (IsKeyPressed(Constants::KEY_OPEN_SCREENSHOTS)) {
+            GameUtils::openScreenshotsFolder();
+        }
+    }
+
     if (state == GameState::PLAYING || state == GameState::MENU) {
         std::unordered_map<int, Direction> keyMap = {
             {KEY_UP, Direction::UP},

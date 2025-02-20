@@ -23,6 +23,7 @@ constexpr int WALL_AMOUNT = 10;
 constexpr KeyboardKey KEY_PAUSE = KeyboardKey::KEY_J;
 constexpr KeyboardKey KEY_CONTINUE = KeyboardKey::KEY_K;
 constexpr KeyboardKey KEY_SCREENSHOT = KeyboardKey::KEY_L;
+constexpr KeyboardKey KEY_OPEN_SCREENSHOTS = KeyboardKey::KEY_O;
 constexpr KeyboardKey KEY_QUIT = KeyboardKey::KEY_SPACE;
 }  // namespace Constants
 
