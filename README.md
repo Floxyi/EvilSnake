@@ -2,7 +2,9 @@
   <img src="/assets/textures/EvilSnake.png" alt="EvilSnake Icon" width="200" />
 </p>
 
-# EvilSnake
+<div align="center">
+    <h1>EvilSnake</h1>
+</div>
 
 ![EvilSnake Screenshot](/assets/textures/Screenshot.png)
 
@@ -29,7 +31,7 @@ git clone https://github.com/Floxyi/EvilSnake.git
 cd EvilSnake
 ```
 
-### Run the Project
+### Run & Build the Project
 
 You can compile and run the game:
 
@@ -37,12 +39,16 @@ You can compile and run the game:
 make run
 ```
 
-### Build the Project
-
 You can build the game for macOS:
 
 ```bash
 make build-macos
+```
+
+If you need to clean the build directories:
+
+```bash
+make clean
 ```
 
 ## Acknowledgments
