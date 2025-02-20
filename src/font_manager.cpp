@@ -1,5 +1,9 @@
 #include "../include/font_manager.h"
 
+#include <raylib.h>
+
+#include "../include/game_utils.h"
+
 const int FontManager::FONT_MAIN = 1;
 const int FontManager::FONT_TITLE = 2;
 
@@ -20,8 +24,8 @@ FontManager &FontManager::getInstance()
 
 void FontManager::initFonts()
 {
-    fonts[FONT_MAIN] = LoadFontEx("assets/fonts/Thaleah.ttf", 256, 0, 250);
-    fonts[FONT_TITLE] = LoadFontEx("assets/fonts/Round.ttf", 256, 0, 250);
+    fonts[FONT_MAIN] = LoadFontEx(TextFormat("%sfonts/Thaleah.ttf", GameUtils::assetPath().c_str()), 256, 0, 250);
+    fonts[FONT_TITLE] = LoadFontEx(TextFormat("%sfonts/Round.ttf", GameUtils::assetPath().c_str()), 256, 0, 250);
 }
 
 Font FontManager::getFont(int fontId) const

@@ -15,6 +15,7 @@ Vector2 getRandomFoodPosition(const std::vector<Vector2> &snakePosition, const s
 Vector2 getRandomWallPosition(const std::vector<Vector2> &snakePosition, const Vector2 &foodPosition);
 std::string getFormattedGameTime(float startTime, float until);
 std::string getFormattedGameMode(GameMode mode);
+std::string assetPath();
 }  // namespace GameUtils
 
 #endif

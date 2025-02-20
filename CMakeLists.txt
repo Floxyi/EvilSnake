@@ -18,7 +18,30 @@ set(SOURCES
 
 include_directories(src)
 
+if(MACOS_BUILD)
+    include(FetchContent)
+
+    # Ensure raylib is built as a static library
+    set(BUILD_SHARED_LIBS OFF)
+    set(FETCHCONTENT_QUIET OFF)
+
+    FetchContent_Declare(
+        raylib
+        GIT_REPOSITORY https://github.com/raysan5/raylib.git
+        GIT_TAG 5.5
+    )
+
+    FetchContent_MakeAvailable(raylib)
+
+    add_definitions(-DMACOS_BUILD)
+else()
+    find_package(raylib REQUIRED)
+endif()
+
 add_executable(EvilSnake ${SOURCES})
 
-find_package(raylib REQUIRED)
-target_link_libraries(EvilSnake raylib)
+if(MACOS_BUILD)
+    target_link_libraries(EvilSnake raylib m)
+else()
+    target_link_libraries(EvilSnake raylib)
+endif()

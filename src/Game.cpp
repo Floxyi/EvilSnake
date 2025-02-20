@@ -98,7 +98,7 @@ void Game::handleDirectionChange(Direction dir)
 void Game::changeGameMode()
 {
     static const std::vector<GameMode> gameModes = {GameMode::NORMAL, GameMode::FAST, GameMode::WALLS};
-    GameMode newMode = gameModes[GetRandomValue(0, gameModes.size() - 1)];
+    GameMode newMode = gameModes[GetRandomValue(0, (int) gameModes.size() - 1)];
 
     if (mode == newMode) return;
 

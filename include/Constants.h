@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #include <raylib.h>
+
 namespace Constants
 {
 constexpr int CELL_AMOUNT_Y = 15;

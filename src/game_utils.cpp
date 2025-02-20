@@ -44,10 +44,9 @@ void GameUtils::takeScreenshot()
 std::string GameUtils::getFormattedGameTime(float startTime, float until)
 {
     float elapsedTime = until - startTime;
-    int minutes = static_cast<int>(elapsedTime) / 60;
-    int seconds = static_cast<int>(elapsedTime) % 60;
-    int milliseconds = static_cast<int>((elapsedTime - static_cast<int>(elapsedTime)) * 100);
-
+    int minutes = (int) (elapsedTime) / 60;
+    int seconds = (int) (elapsedTime) % 60;
+    int milliseconds = (int) ((elapsedTime - (int) (elapsedTime)) * 100);
     return std::format("{:02}:{:02}:{:02}", minutes, seconds, milliseconds);
 }
 
@@ -69,7 +68,7 @@ Vector2 GameUtils::getRandomGridPosition()
 {
     int x = GetRandomValue(0, Constants::CELL_AMOUNT_X - 1) * Constants::CELL_SIZE;
     int y = GetRandomValue(0, Constants::CELL_AMOUNT_Y - 1) * Constants::CELL_SIZE;
-    return {static_cast<float>(x), static_cast<float>(y)};
+    return {(float) (x), (float) (y)};
 }
 
 Vector2 GameUtils::getRandomFoodPosition(
@@ -96,4 +95,26 @@ Vector2 GameUtils::getRandomWallPosition(const std::vector<Vector2> &snakePositi
     } while (
         isPositionOnSnake(position, snakePosition) || (position.x == foodPosition.x && position.y == foodPosition.y));
     return position;
+}
+
+std::string GameUtils::assetPath()
+{
+    const char *workingDir = GetApplicationDirectory();
+    std::string fullPath = std::string(workingDir);
+
+    size_t pos = fullPath.find_last_of("/");
+    if (pos != std::string::npos) {
+        pos = fullPath.find_last_of("/", pos - 1);
+    }
+
+    if (pos != std::string::npos) {
+        fullPath = fullPath.substr(0, pos);
+    }
+
+#ifdef MACOS_BUILD
+    fullPath += "/Resources";
+#endif
+
+    fullPath += "/assets/";
+    return fullPath;
 }

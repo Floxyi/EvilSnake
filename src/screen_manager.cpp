@@ -32,7 +32,7 @@ void ScreenManager::drawMenuScreen()
     TextUtils::drawAlignedText("[L] - Screenshot", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM,
         HorizontalAlignment::CENTER, 70);
     TextUtils::drawAlignedText(
-        "v1.0", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM, HorizontalAlignment::RIGHT, 10);
+        "v1.0.0", FontManager::FONT_MAIN, 20, DARKGRAY, VerticalAlignment::BOTTOM, HorizontalAlignment::RIGHT, 10);
 }
 
 void ScreenManager::drawPlayingScreen(int score, std::string gameMode, std::string time)

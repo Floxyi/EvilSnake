@@ -1,5 +1,9 @@
 #include "../include/sound_manager.h"
 
+#include <raylib.h>
+
+#include "../include/game_utils.h"
+
 const int SoundManager::SOUND_EAT = 1;
 const int SoundManager::SOUND_EXPLOSION = 2;
 const int SoundManager::SOUND_START = 3;
@@ -22,9 +26,9 @@ SoundManager &SoundManager::getInstance()
 
 void SoundManager::initSounds()
 {
-    sounds[SOUND_EAT] = LoadSound("assets/sounds/eat.wav");
-    sounds[SOUND_EXPLOSION] = LoadSound("assets/sounds/explosion.wav");
-    sounds[SOUND_START] = LoadSound("assets/sounds/start.wav");
+    sounds[SOUND_EAT] = LoadSound(TextFormat("%ssounds/eat.wav", GameUtils::assetPath().c_str()));
+    sounds[SOUND_EXPLOSION] = LoadSound(TextFormat("%ssounds/explosion.wav", GameUtils::assetPath().c_str()));
+    sounds[SOUND_START] = LoadSound(TextFormat("%ssounds/start.wav", GameUtils::assetPath().c_str()));
 }
 
 void SoundManager::play(int soundId)
