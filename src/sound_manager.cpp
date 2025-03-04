@@ -17,6 +17,7 @@
 const int SoundManager::SOUND_EAT = 1;
 const int SoundManager::SOUND_EXPLOSION = 2;
 const int SoundManager::SOUND_START = 3;
+const int SoundManager::SOUND_CAMERA = 4;
 
 /**
  * @brief Constructs the SoundManager and initializes the audio device.
@@ -55,6 +56,7 @@ void SoundManager::initSounds()
     sounds[SOUND_EAT] = LoadSound(TextFormat("%ssounds/eat.wav", GameUtils::getAssetPath().c_str()));
     sounds[SOUND_EXPLOSION] = LoadSound(TextFormat("%ssounds/explosion.wav", GameUtils::getAssetPath().c_str()));
     sounds[SOUND_START] = LoadSound(TextFormat("%ssounds/start.wav", GameUtils::getAssetPath().c_str()));
+    sounds[SOUND_CAMERA] = LoadSound(TextFormat("%ssounds/camera.mp3", GameUtils::getAssetPath().c_str()));
 }
 
 /**

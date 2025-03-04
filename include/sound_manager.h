@@ -16,6 +16,7 @@ class SoundManager
     static const int SOUND_EAT;
     static const int SOUND_EXPLOSION;
     static const int SOUND_START;
+    static const int SOUND_CAMERA;
 
    private:
     SoundManager();

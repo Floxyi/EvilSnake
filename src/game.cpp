@@ -74,6 +74,7 @@ void Game::reset()
 void Game::handleInput()
 {
     if (IsKeyPressed(Constants::KEY_SCREENSHOT)) {
+        SoundManager::getInstance().play(SoundManager::SOUND_CAMERA);
         GameUtils::takeScreenshot();
     }
 
