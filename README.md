@@ -14,7 +14,7 @@
 
 Before you begin, ensure that you have the following installed on your machine (macOS example):
 
-- **C++ Compiler**: Install `clang++` via Xcode Command Line Tools (`xcode-select --install`)
+- **C++ Compiler**: Install `clang++` via Xcode Command Line Tools (via `xcode-select --install`)
 
 - **CMake**: `brew install cmake`
 

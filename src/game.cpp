@@ -37,6 +37,7 @@ Game::Game()
     InitWindow(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT, "Evil Snake");
     FontManager::getInstance().initFonts();
     SoundManager::getInstance().initSounds();
+    GameUtils::applyApplicationIcon();
 }
 
 /**
